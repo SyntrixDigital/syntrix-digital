@@ -890,13 +890,27 @@ function CalendlyPage({ leadData, onBack }) {
             </button>
             <div style={{width:60}}/>
           </div>
-          <div style={{display:"inline-block",background:"rgba(34,197,94,0.12)",border:"1px solid rgba(34,197,94,0.25)",color:"#22c55e",borderRadius:100,padding:"5px 18px",fontSize:12,fontWeight:700,marginBottom:18}}>✓ Analyse abgeschlossen</div>
-          <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>{leadData?.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}</h1>
-          <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir bringen deine Analyse-Ergebnisse direkt mit.</p>
+          {leadData?.score ? (
+            <>
+              <div style={{display:"inline-block",background:"rgba(34,197,94,0.12)",border:"1px solid rgba(34,197,94,0.25)",color:"#22c55e",borderRadius:100,padding:"5px 18px",fontSize:12,fontWeight:700,marginBottom:18}}>✓ Analyse abgeschlossen</div>
+              <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>
+                {leadData.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}
+              </h1>
+              <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir bringen deine Analyse-Ergebnisse direkt mit.</p>
+            </>
+          ) : (
+            <>
+              <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>Unverbindliches Erstgespräch buchen.</h1>
+              <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir schauen gemeinsam wo dein Marketing Potenzial hat.</p>
+            </>
+          )}
         </div>
         {leadData?.score&&<div style={{background:"rgba(14,165,233,0.07)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:12,padding:"12px 20px",marginBottom:24,textAlign:"center"}}><span style={{fontSize:13,color:"#7dd3fc"}}>Score: {leadData.score}/100 · {leadData.status}</span></div>}
         <div style={{display:"flex",justifyContent:"center",gap:22,marginBottom:28,flexWrap:"wrap"}}>
-          {["✓ Kostenlos","✓ 30 Minuten","✓ Analyse wird mitgebracht"].map(b=><span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>)}
+          {leadData?.score
+            ? ["✓ Kostenlos","✓ 30 Minuten","✓ Analyse wird mitgebracht"].map(b=><span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>)
+            : ["✓ Kostenlos","✓ 30 Minuten","✓ Keine Verpflichtung"].map(b=><span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>)
+          }
         </div>
         <div style={{background:"rgba(255,255,255,0.02)",borderRadius:20,border:"1px solid rgba(255,255,255,0.08)",overflow:"hidden",minHeight:650}}>
           <div className="calendly-inline-widget" data-url={`https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9`} style={{minWidth:320,height:700}}/>

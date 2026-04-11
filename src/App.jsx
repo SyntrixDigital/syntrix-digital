@@ -729,7 +729,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                   marginBottom:20,fontSize:26
                 }}>🎯</div>
                 <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,3.5vw,30px)",fontWeight:900,color:"#0f172a",letterSpacing:"-0.025em",marginBottom:10}}>Fast geschafft.</h2>
-                <p style={{fontSize:15,color:"#64748b",lineHeight:1.7,maxWidth:420}}>Trag deine Kontaktdaten ein — wir senden dir deine persönliche Auswertung und melden uns nur, wenn wir echtes Potenzial sehen.</p>
+                <p style={{fontSize:15,color:"#64748b",lineHeight:1.7,maxWidth:420}}>Trag deine Kontaktdaten ein — wir senden dir deine persönliche Auswertung!</p>
               </div>
               <div style={{display:"flex",flexDirection:"column",gap:14}}>
                 {[
@@ -873,7 +873,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
 }
 
 // ── CALENDLY ──────────────────────────────────────────────────────────────────
-function CalendlyPage({ leadData }) {
+function CalendlyPage({ leadData, onBack }) {
   useEffect(()=>{
     const s=document.createElement("script");s.src="https://assets.calendly.com/assets/external/widget.js";s.async=true;document.body.appendChild(s);
     return()=>{try{document.body.removeChild(s);}catch(e){}};
@@ -883,7 +883,13 @@ function CalendlyPage({ leadData }) {
       <link href={FONT} rel="stylesheet"/>
       <div style={{maxWidth:740,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:32}}>
-          <div style={{display:"inline-flex",alignItems:"center",gap:10,marginBottom:18}}><Logo size={32}/><span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:20,color:"#fff"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span></span></div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
+            <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Sans',sans-serif"}}>← Zurück</button>
+            <button onClick={onBack} style={{display:"inline-flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
+              <Logo size={32}/><span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:20,color:"#fff"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span></span>
+            </button>
+            <div style={{width:60}}/>
+          </div>
           <div style={{display:"inline-block",background:"rgba(34,197,94,0.12)",border:"1px solid rgba(34,197,94,0.25)",color:"#22c55e",borderRadius:100,padding:"5px 18px",fontSize:12,fontWeight:700,marginBottom:18}}>✓ Analyse abgeschlossen</div>
           <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>{leadData?.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}</h1>
           <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir bringen deine Analyse-Ergebnisse direkt mit.</p>
@@ -1988,7 +1994,7 @@ export default function App() {
   const goCalendly = (d) => { setLead(d); setPage("calendly"); };
 
   if(page==="funnel")     return <PotenzialFunnel onBack={()=>setPage("home")} onCalendly={goCalendly}/>;
-  if(page==="calendly")   return <CalendlyPage leadData={leadData}/>;
+  if(page==="calendly")   return <CalendlyPage leadData={leadData} onBack={()=>setPage("home")}/>;
   if(page==="impressum")  return <LegalPage type="impressum"  onBack={()=>setPage("home")}/>;
   if(page==="datenschutz")return <LegalPage type="datenschutz" onBack={()=>setPage("home")}/>;
   return (

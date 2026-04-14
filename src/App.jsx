@@ -168,7 +168,14 @@ function ServiceModal({ onClose, onFunnel }) {
       name:            d.name.trim(),
       email:           d.email.trim(),
       phone:           d.phone.trim() || "–",
-      leistungen:      d.selected_services.join(", "),
+      leistungen:      d.selected_services.map(id=>({
+            "seo":"KI-SEO & Content",
+            "li":"LinkedIn Lead-Generierung",
+            "sm":"Social Media Management",
+            "cb":"Chatbot & Automatisierung",
+            "vid":"KI-Erklärvideos",
+            "wl":"White-Label"
+          }[id]||id)).join(", "),
       ziel:            d.goal,
       aktueller_stand: d.current_status,
       zusammenarbeit:  d.collaboration_type,

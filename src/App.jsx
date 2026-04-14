@@ -558,6 +558,18 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const submit=()=>{
     if(!lead.name.trim()||!lead.email.trim()) return;
     const r=calcResult(ans);setResult(r);setStep(11);
+    // Webhook sofort nach Auswertung senden
+    fetch("https://hook.eu1.make.com/czp5fuht1b3uwx1o3dk7bf65juot5qt2",{
+      method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        name:lead.name,email:lead.email,phone:lead.phone||"–",
+        score:r.score+"/100",status:r.status,
+        problem:r.problem,opportunity:r.opportunity,
+        quelle:"Potenzialanalyse syntrixdigital.de",
+        timestamp:new Date().toISOString()
+      })
+    }).catch(()=>{});
   };
 
   const goBook=()=>{

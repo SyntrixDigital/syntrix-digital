@@ -852,7 +852,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               </div>
 
               {/* SCORE + MINI ANALYSE — nebeneinander */}
-              <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:12,marginBottom:12,alignItems:"stretch"}}>
+              <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:12,marginBottom:8,alignItems:"stretch"}}>
                 {/* Score Ring */}
                 <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:16,padding:"18px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8,minWidth:110}}>
                   <div style={{position:"relative",width:88,height:88}}>
@@ -894,18 +894,18 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               </div>
 
               {/* PROBLEM + POTENZIAL */}
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
-                <div style={{background:"rgba(239,68,68,0.05)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:14,padding:"14px"}}>
-                  <div style={{fontSize:9,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Handlungsfelder</div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
+                <div style={{background:"rgba(239,68,68,0.05)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:14,padding:"10px 12px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>Handlungsfelder</div>
                   {["Kein system. Funnel","Wenig Automatisierung","Unplanbare Leads"].map(p=>(
-                    <div key={p} style={{display:"flex",gap:6,marginBottom:5}}>
+                    <div key={p} style={{display:"flex",gap:6,marginBottom:4}}>
                       <span style={{color:"#ef4444",fontSize:10,flexShrink:0,marginTop:1}}>✗</span>
                       <span style={{fontSize:11,color:"#64748b",lineHeight:1.4}}>{p}</span>
                     </div>
                   ))}
                 </div>
                 <div style={{background:"rgba(34,197,94,0.05)",border:"1px solid rgba(34,197,94,0.15)",borderRadius:14,padding:"14px"}}>
-                  <div style={{fontSize:9,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Dein Potenzial</div>
+                  <div style={{fontSize:9,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>Dein Potenzial</div>
                   {["Planbare Anfragen","Conversion steigern","Zeit sparen"].map(p=>(
                     <div key={p} style={{display:"flex",gap:6,marginBottom:5}}>
                       <span style={{color:"#22c55e",fontSize:10,flexShrink:0,marginTop:1}}>→</span>
@@ -916,7 +916,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               </div>
 
               {/* EMAIL HINWEIS */}
-              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:14,padding:"16px 18px",marginBottom:12,display:"flex",gap:14,alignItems:"flex-start"}}>
+              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:14,padding:"16px 18px",marginBottom:8,display:"flex",gap:10,alignItems:"flex-start"}}>
                 <span style={{fontSize:20,flexShrink:0}}>📩</span>
                 <div>
                   <div style={{fontFamily:"'Sora',sans-serif",fontSize:13,fontWeight:800,color:"#f1f5f9",marginBottom:4}}>Detaillierte Auswertung ist auf dem Weg</div>
@@ -931,16 +931,19 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               {/* CTA */}
               <button onClick={goBook} className="cta-btn" style={{
                 width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
-                color:"#fff",border:"none",borderRadius:12,padding:"15px",
-                fontSize:15,fontWeight:700,cursor:"pointer",
+                color:"#fff",border:"none",borderRadius:12,padding:"13px",
+                fontSize:14,fontWeight:700,cursor:"pointer",
                 fontFamily:"'Sora',sans-serif",
-                boxShadow:"0 6px 24px rgba(14,165,233,0.35)",marginBottom:6
+                boxShadow:"0 6px 24px rgba(14,165,233,0.35)",marginBottom:4
               }}>
                 Kostenloses Erstgespräch buchen →
               </button>
               <p style={{fontSize:11,color:"#334155",textAlign:"center"}}>Lass uns deine Analyse gemeinsam durchgehen.</p>
             </div>
           )}
+
+        </div>
+      </div>
 
       {/* ── TRUST FOOTER ── */}
       <div style={{

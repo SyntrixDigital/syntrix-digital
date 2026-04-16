@@ -154,7 +154,7 @@ function ServiceModal({ onClose, onFunnel }) {
   const canNext = [d.selected_services.length>0, d.goal&&d.current_status, d.collaboration_type&&d.budget&&d.timeline, d.name.trim()&&d.email.trim()];
 
   const Opt = ({k,v,label,badge}) => (
-    <button onClick={()=>set1(k,v)} className="choice-opt" style={{width:"100%",textAlign:"left",padding:"12px 16px",borderRadius:10,border:d[k]===v?"1.5px solid #0ea5e9":"1px solid #e2e8f0",background:d[k]===v?"rgba(14,165,233,0.06)":"#fafafa",cursor:"pointer",fontSize:14,color:"#0f172a",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,fontFamily:"'DM Sans',sans-serif"}}>
+    <button onClick={()=>set1(k,v)} className="choice-opt" style={{width:"100%",textAlign:"left",padding:"12px 16px",borderRadius:10,border:d[k]===v?"1.5px solid #0ea5e9":"1px solid #e2e8f0",background:d[k]===v?"rgba(14,165,233,0.06)":"#fafafa",cursor:"pointer",fontSize:14,color:"#0f172a",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,fontFamily:"DM Sans,sans-serif"}}>
       {label}{badge&&<span style={{fontSize:10,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",padding:"2px 8px",borderRadius:6,fontWeight:700}}>{badge}</span>}{d[k]===v&&!badge&&<span style={{color:"#0ea5e9",fontSize:13,fontWeight:700}}>✓</span>}
     </button>
   );
@@ -266,12 +266,12 @@ function ServiceModal({ onClose, onFunnel }) {
               {[{l:"Name *",k:"name",ph:"Max Mustermann",t:"text"},{l:"E-Mail *",k:"email",ph:"max@firma.de",t:"email"},{l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"}].map(({l,k,ph,t})=>(
                 <div key={k} style={{marginBottom:12}}>
                   <label style={{fontSize:12,color:"#94a3b8",display:"block",marginBottom:5}}>{l}</label>
-                  <input value={d[k]} onChange={e=>set1(k,e.target.value)} placeholder={ph} type={t} style={{width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #e2e8f0",fontSize:14,outline:"none",boxSizing:"border-box",fontFamily:"'DM Sans',sans-serif",color:"#0f172a"}}/>
+                  <input value={d[k]} onChange={e=>set1(k,e.target.value)} placeholder={ph} type={t} style={{width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #e2e8f0",fontSize:14,outline:"none",boxSizing:"border-box",fontFamily:"DM Sans,sans-serif",color:"#0f172a"}}/>
                 </div>
               ))}
               <div style={{marginBottom:14}}>
                 <label style={{fontSize:12,color:"#94a3b8",display:"block",marginBottom:5}}>Weitere Informationen</label>
-                <textarea value={d.message} onChange={e=>set1("message",e.target.value)} placeholder="Optional..." rows={3} style={{width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #e2e8f0",fontSize:14,outline:"none",resize:"none",boxSizing:"border-box",fontFamily:"'DM Sans',sans-serif",color:"#0f172a"}}/>
+                <textarea value={d.message} onChange={e=>set1("message",e.target.value)} placeholder="Optional..." rows={3} style={{width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #e2e8f0",fontSize:14,outline:"none",resize:"none",boxSizing:"border-box",fontFamily:"DM Sans,sans-serif",color:"#0f172a"}}/>
               </div>
               <div style={{display:"flex",gap:8}}>
                 <button onClick={()=>setStep(3)} style={{flex:1,background:"#f1f5f9",color:"#64748b",border:"none",borderRadius:10,padding:"12px",fontSize:13,cursor:"pointer"}}>← Zurück</button>
@@ -594,149 +594,182 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const pct = step<10 ? Math.round((step+1)/total*100) : 100;
 
   return (
-    <div style={{minHeight:"100vh",background:"#fafafa",fontFamily:"'DM Sans',sans-serif",display:"flex",flexDirection:"column"}}>
+    <div style={{minHeight:"100vh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
       <link href={FONT} rel="stylesheet"/>
+      {/* Hintergrund-Effekte */}
+      <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:"-20%",left:"-10%",width:"50vw",height:"50vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(14,165,233,0.08),transparent 70%)",filter:"blur(40px)"}}/>
+        <div style={{position:"absolute",bottom:"-10%",right:"-10%",width:"40vw",height:"40vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.08),transparent 70%)",filter:"blur(40px)"}}/>
+        <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)",backgroundSize:"48px 48px"}}/>
+      </div>
       <style>{`
-        @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes slideDown{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:translateY(0)}}
-        .qa-card{
-          border:1.5px solid #e8edf2;
+        @keyframes fadeSlideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes pulse2{0%,100%{opacity:1}50%{opacity:0.4}}
+        @keyframes scanLine{0%{transform:translateY(-100%)}100%{transform:translateY(400%)}}
+        .qa-premium{
+          position:relative;
+          border:1px solid rgba(255,255,255,0.08);
           border-radius:16px;
-          padding:18px 20px;
-          background:#fff;
+          padding:20px 22px;
+          background:rgba(255,255,255,0.03);
           cursor:pointer;
           display:flex;
           align-items:center;
           gap:16px;
-          transition:all 0.22s ease;
+          transition:all 0.25s ease;
           text-align:left;
           width:100%;
+          backdrop-filter:blur(8px);
         }
-        .qa-card:hover{
+
+        .qa-premium:hover{
+          border-color:rgba(14,165,233,0.4);
+          background:rgba(14,165,233,0.06);
+          transform:translateX(6px);
+          box-shadow:0 4px 24px rgba(14,165,233,0.12),inset 0 0 0 1px rgba(14,165,233,0.15);
+        }
+        .qa-premium.selected-q{
           border-color:#0ea5e9;
-          background:#f0f9ff;
-          transform:translateX(4px);
-          box-shadow:0 4px 20px rgba(14,165,233,0.1);
+          background:linear-gradient(135deg,rgba(14,165,233,0.12),rgba(99,102,241,0.08));
+          box-shadow:0 4px 32px rgba(14,165,233,0.2),inset 0 0 0 1px rgba(14,165,233,0.3);
         }
-        .qa-card.selected{
-          border-color:#0ea5e9;
-          background:linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.05));
-          box-shadow:0 4px 24px rgba(14,165,233,0.15);
-        }
-        .qa-letter{
-          width:36px;height:36px;border-radius:10px;
-          background:#f1f5f9;
+        .qa-num{
+          width:38px;height:38px;border-radius:10px;
+          background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
           display:flex;align-items:center;justify-content:center;
-          font-size:13px;font-weight:700;color:#94a3b8;
-          flex-shrink:0;transition:all 0.22s;
-          font-family:'Sora',sans-serif;
+          font-size:12px;font-weight:700;color:#475569;
+          flex-shrink:0;transition:all 0.25s;
+          font-family:Sora,sans-serif;
         }
-        .qa-card.selected .qa-letter{
+        .qa-premium.selected-q .qa-num{
           background:linear-gradient(135deg,#0ea5e9,#6366f1);
-          color:#fff;
+          color:#fff;border-color:transparent;
         }
-        .qa-card:hover:not(.selected) .qa-letter{
-          background:#e0f2fe;color:#0ea5e9;
+        .qa-premium:hover:not(.selected-q) .qa-num{
+          background:rgba(14,165,233,0.15);color:#0ea5e9;border-color:rgba(14,165,233,0.3);
         }
-        .funnel-input{
-          width:100%;padding:14px 16px;border-radius:12px;
-          border:1.5px solid #e8edf2;background:#fff;
-          font-size:15px;color:#0f172a;outline:none;
-          font-family:'DM Sans',sans-serif;
-          transition:border-color 0.2s,box-shadow 0.2s;
-          box-sizing:border-box;
+        .premium-input{
+          width:100%;padding:15px 18px;border-radius:12px;
+          border:1px solid rgba(255,255,255,0.1);
+          background:rgba(255,255,255,0.05);
+          color:#f1f5f9;font-size:15px;outline:none;
+          font-family:DM Sans,sans-serif;
+          transition:all 0.2s;box-sizing:border-box;
         }
-        .funnel-input:focus{
+        .premium-input:focus{
           border-color:#0ea5e9;
-          box-shadow:0 0 0 3px rgba(14,165,233,0.12);
+          box-shadow:0 0 0 3px rgba(14,165,233,0.15);
+          background:rgba(14,165,233,0.05);
         }
-        .funnel-input::placeholder{color:#cbd5e1}
+        .premium-input::placeholder{color:#334155}
       `}</style>
 
       {/* ── HEADER ── */}
-      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(250,250,250,0.97)",backdropFilter:"blur(12px)",borderBottom:"1px solid #f1f5f9",padding:"16px 24px"}}>
-        <div style={{maxWidth:600,margin:"0 auto"}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
-            <button onClick={goBack} style={{background:"none",border:"none",color:"#94a3b8",fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Sans',sans-serif",padding:0}}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,9,15,0.92)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"14px 24px"}}>
+        <div style={{maxWidth:620,margin:"0 auto"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+            <button onClick={goBack} style={{background:"none",border:"none",color:"#475569",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"DM Sans,sans-serif",padding:0}}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="#475569" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
               Zurück
             </button>
             <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:8,background:"none",border:"none",cursor:"pointer",padding:0}}>
-              <Logo size={24} dark={false}/>
-              <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:15,color:"#0f172a"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span></span>
+              <Logo size={22} dark={false}/>
+              <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:14,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
             </button>
-            <span style={{fontSize:12,color:"#94a3b8",fontWeight:600,fontFamily:"'Sora',sans-serif"}}>
-              {step<10?`${step+1} / ${total}`:step===10?"Fast da":"✓"}
-            </span>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <div style={{width:6,height:6,borderRadius:"50%",background:"#0ea5e9",animation:"pulse2 2s infinite"}}/>
+              <span style={{fontSize:11,color:"#334155",fontWeight:600,fontFamily:"Sora,sans-serif"}}>
+                {step<10?`${step+1} / ${total}`:step===10?"Fast da":"✓"}
+              </span>
+            </div>
           </div>
           {/* Progress Bar */}
-          <div style={{position:"relative",height:4,background:"#f1f5f9",borderRadius:99,overflow:"hidden"}}>
+          <div style={{position:"relative",height:3,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden"}}>
             <div style={{
               position:"absolute",top:0,left:0,height:"100%",
               width:`${pct}%`,
-              background:"linear-gradient(90deg,#0ea5e9,#6366f1)",
+              background:"linear-gradient(90deg,#0ea5e9,#6366f1,#a78bfa)",
               borderRadius:99,
-              transition:"width 0.5s cubic-bezier(0.4,0,0.2,1)"
+              transition:"width 0.6s cubic-bezier(0.4,0,0.2,1)",
+              boxShadow:"0 0 8px rgba(14,165,233,0.6)"
             }}/>
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",marginTop:6}}>
-            <span style={{fontSize:11,color:"#cbd5e1"}}>{step<10?"Kostenlose Potenzialanalyse":""}</span>
-            <span style={{fontSize:11,color:"#0ea5e9",fontWeight:700}}>{pct}%</span>
+          <div style={{display:"flex",justifyContent:"space-between",marginTop:5}}>
+            <span style={{fontSize:10,color:"#1e293b",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.08em"}}>
+              {step<10?"Syntrix Analyse-System™":""}
+            </span>
+            <span style={{fontSize:10,color:"#0ea5e9",fontWeight:700}}>{pct}%</span>
           </div>
         </div>
       </div>
 
       {/* ── CONTENT ── */}
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"48px 20px 80px"}}>
+      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 20px 100px",position:"relative",zIndex:1}}>
         <div style={{
-          maxWidth:560,width:"100%",
+          maxWidth:580,width:"100%",
           opacity:vis?1:0,
-          transform:vis?"translateY(0)":"translateY(16px)",
-          transition:"all 0.3s cubic-bezier(0.4,0,0.2,1)"
+          transform:vis?"translateY(0)":"translateY(18px)",
+          transition:"all 0.32s cubic-bezier(0.4,0,0.2,1)"
         }}>
 
           {/* ── FRAGEN (step 0–9) ── */}
           {step<10&&(
             <div>
-              <div style={{marginBottom:40}}>
+              {/* System Badge */}
+              <div style={{marginBottom:32}}>
                 <div style={{
-                  display:"inline-flex",alignItems:"center",gap:6,
-                  background:"linear-gradient(135deg,rgba(14,165,233,0.1),rgba(99,102,241,0.08))",
-                  border:"1px solid rgba(14,165,233,0.2)",
-                  borderRadius:100,padding:"5px 14px",marginBottom:20
+                  display:"inline-flex",alignItems:"center",gap:8,
+                  background:"rgba(14,165,233,0.08)",
+                  border:"1px solid rgba(14,165,233,0.18)",
+                  borderRadius:100,padding:"6px 16px",marginBottom:22
                 }}>
-                  <div style={{width:6,height:6,borderRadius:"50%",background:"#0ea5e9"}}/>
-                  <span style={{fontSize:11,fontWeight:700,color:"#0ea5e9",letterSpacing:"0.08em",textTransform:"uppercase"}}>Frage {step+1} von {total}</span>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <circle cx="5" cy="5" r="4" stroke="#0ea5e9" strokeWidth="1.2"/>
+                    <circle cx="5" cy="5" r="1.5" fill="#0ea5e9"/>
+                  </svg>
+                  <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse läuft · Schritt {step+1} von {total}</span>
                 </div>
                 <h2 style={{
-                  fontFamily:"'Sora',sans-serif",
-                  fontSize:"clamp(20px,3.5vw,28px)",
+                  fontFamily:"Sora,sans-serif",
+                  fontSize:"clamp(18px,3vw,26px)",
                   fontWeight:900,
-                  color:"#0f172a",
-                  lineHeight:1.25,
-                  letterSpacing:"-0.02em",
-                  marginBottom:8
+                  color:"#f8fafc",
+                  lineHeight:1.2,
+                  letterSpacing:"-0.025em",
+                  marginBottom:10
                 }}>{q.text}</h2>
-                <p style={{fontSize:13,color:"#94a3b8"}}>Wähle die Option die am besten passt</p>
+                <p style={{fontSize:12,color:"#334155",fontWeight:500}}>
+                  Datenbasierte Bewertung · Wähle die zutreffendste Option
+                </p>
               </div>
+
+              {/* Answer Cards */}
               <div style={{display:"flex",flexDirection:"column",gap:10}}>
                 {q.opts.map((opt,i)=>(
                   <button
                     key={i}
                     onClick={()=>pick(opt)}
-                    className={`qa-card${ans[q.id]===opt?" selected":""}`}
+                    className={`qa-premium${ans[q.id]===opt?" selected-q":""}`}
                   >
-                    <div className="qa-letter">
+                    <div className="qa-num">
                       {ans[q.id]===opt?(
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3 3 6-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                      ):["A","B","C","D","E"][i]}
+                        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5l3 3 6-6" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      ):["01","02","03","04","05"][i]}
                     </div>
-                    <span style={{fontSize:15,fontWeight:500,color:ans[q.id]===opt?"#0f172a":"#334155",flex:1}}>{opt}</span>
+                    <span style={{fontSize:14,fontWeight:500,color:ans[q.id]===opt?"#f1f5f9":"#94a3b8",flex:1,lineHeight:1.4}}>{opt}</span>
                     {ans[q.id]===opt&&(
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 12l4-4-4-4" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      <div style={{width:20,height:20,borderRadius:"50%",background:"rgba(14,165,233,0.2)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 9l4-4-4-4" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </div>
                     )}
                   </button>
                 ))}
+              </div>
+
+              {/* Status Bar */}
+              <div style={{marginTop:24,display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10}}>
+                <div style={{width:5,height:5,borderRadius:"50%",background:"#22c55e",animation:"pulse2 2s infinite",flexShrink:0}}/>
+                <span style={{fontSize:11,color:"#334155"}}>Systematische Auswertung läuft im Hintergrund — Daten werden verarbeitet</span>
               </div>
             </div>
           )}
@@ -744,174 +777,170 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           {/* ── KONTAKTDATEN (step 10) ── */}
           {step===10&&(
             <div>
-              <div style={{marginBottom:36}}>
+              <div style={{marginBottom:32}}>
                 <div style={{
-                  width:56,height:56,borderRadius:16,
-                  background:"linear-gradient(135deg,rgba(14,165,233,0.15),rgba(99,102,241,0.1))",
-                  display:"flex",alignItems:"center",justifyContent:"center",
-                  marginBottom:20,fontSize:26
-                }}>🎯</div>
-                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,3.5vw,30px)",fontWeight:900,color:"#0f172a",letterSpacing:"-0.025em",marginBottom:10}}>Fast geschafft.</h2>
-                <p style={{fontSize:15,color:"#64748b",lineHeight:1.7,maxWidth:420}}>Trag deine Kontaktdaten ein — wir senden dir deine persönliche Auswertung!</p>
+                  display:"inline-flex",alignItems:"center",gap:8,
+                  background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.18)",
+                  borderRadius:100,padding:"6px 16px",marginBottom:22
+                }}>
+                  <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
+                  <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse abgeschlossen · Ergebnis wird erstellt</span>
+                </div>
+                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,3.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:10}}>Fast geschafft.</h2>
+                <p style={{fontSize:14,color:"#475569",lineHeight:1.7,maxWidth:420}}>Trag deine Kontaktdaten ein — du erhältst deine persönliche Auswertung.</p>
               </div>
-              <div style={{display:"flex",flexDirection:"column",gap:14}}>
-                {[
-                  {l:"Dein Name",k:"name",ph:"Max Mustermann",t:"text",icon:"👤"},
-                  {l:"E-Mail-Adresse",k:"email",ph:"max@firma.de",t:"email",icon:"✉️"},
-                  {l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel",icon:"📞"}
-                ].map(({l,k,ph,t,icon})=>(
-                  <div key={k}>
-                    <label style={{fontSize:13,fontWeight:600,color:"#0f172a",display:"block",marginBottom:7}}>{l}</label>
-                    <input
-                      value={lead[k]}
-                      onChange={e=>setLead(p=>({...p,[k]:e.target.value}))}
-                      placeholder={ph}
-                      type={t}
-                      className="funnel-input"
-                    />
-                  </div>
-                ))}
-              </div>
-              <button
-                onClick={submit}
-                disabled={!lead.name.trim()||!lead.email.trim()}
-                style={{
-                  width:"100%",marginTop:20,
-                  background:lead.name.trim()&&lead.email.trim()
-                    ?"linear-gradient(135deg,#0ea5e9,#6366f1)"
-                    :"#f1f5f9",
-                  color:lead.name.trim()&&lead.email.trim()?"#fff":"#cbd5e1",
-                  border:"none",borderRadius:12,padding:"16px",
-                  fontSize:15,fontWeight:700,
-                  cursor:lead.name.trim()&&lead.email.trim()?"pointer":"not-allowed",
-                  fontFamily:"'Sora',sans-serif",
-                  transition:"all 0.2s",
-                  boxShadow:lead.name.trim()&&lead.email.trim()?"0 4px 20px rgba(14,165,233,0.3)":"none"
-                }}
-              >
-                Auswertung anzeigen →
-              </button>
-              <p style={{fontSize:12,color:"#cbd5e1",textAlign:"center",marginTop:12}}>Kein Spam · Nur echte Analyse-Ergebnisse</p>
 
+              <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:18,padding:"28px 24px",backdropFilter:"blur(8px)"}}>
+                <div style={{display:"flex",flexDirection:"column",gap:16}}>
+                  {[
+                    {l:"Name",k:"name",ph:"Max Mustermann",t:"text"},
+                    {l:"E-Mail-Adresse",k:"email",ph:"max@firma.de",t:"email"},
+                    {l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"}
+                  ].map(({l,k,ph,t})=>(
+                    <div key={k}>
+                      <label style={{fontSize:11,fontWeight:700,color:"#475569",display:"block",marginBottom:8,letterSpacing:"0.06em",textTransform:"uppercase"}}>{l}</label>
+                      <input
+                        value={lead[k]}
+                        onChange={e=>setLead(p=>({...p,[k]:e.target.value}))}
+                        placeholder={ph}
+                        type={t}
+                        className="premium-input"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={submit}
+                  disabled={!lead.name.trim()||!lead.email.trim()}
+                  style={{
+                    width:"100%",marginTop:20,
+                    background:lead.name.trim()&&lead.email.trim()
+                      ?"linear-gradient(135deg,#0ea5e9,#6366f1)"
+                      :"rgba(255,255,255,0.04)",
+                    color:lead.name.trim()&&lead.email.trim()?"#fff":"#334155",
+                    border:lead.name.trim()&&lead.email.trim()?"none":"1px solid rgba(255,255,255,0.06)",
+                    borderRadius:12,padding:"15px",
+                    fontSize:15,fontWeight:700,
+                    cursor:lead.name.trim()&&lead.email.trim()?"pointer":"not-allowed",
+                    fontFamily:"'Sora',sans-serif",
+                    transition:"all 0.2s",
+                    boxShadow:lead.name.trim()&&lead.email.trim()?"0 4px 20px rgba(14,165,233,0.35)":"none"
+                  }}
+                >
+                  Analyse jetzt auswerten →
+                </button>
+              </div>
+              <p style={{fontSize:11,color:"#1e293b",textAlign:"center",marginTop:12}}>Kein Spam · DSGVO-konform · Nur echte Ergebnisse</p>
             </div>
           )}
 
+
           {/* ── ERGEBNIS (step 11) ── */}
           {step===11&&result&&(
-            <div style={{animation:"fadeUp 0.6s ease both"}}>
-              <style>{`
-                .result-card{transition:box-shadow 0.25s,transform 0.25s}
-                .result-card:hover{box-shadow:0 8px 32px rgba(15,23,42,0.1);transform:translateY(-2px)}
-              `}</style>
+            <div style={{animation:"fadeSlideUp 0.6s ease both",paddingBottom:8}}>
 
               {/* HEADER */}
-              <div style={{textAlign:"center",marginBottom:28}}>
-                <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"5px 14px",marginBottom:14}}>
+              <div style={{textAlign:"center",marginBottom:20}}>
+                <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"5px 14px",marginBottom:12}}>
                   <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
-                  <span style={{fontSize:11,fontWeight:700,color:"#22c55e",letterSpacing:"0.08em",textTransform:"uppercase"}}>Syntrix Analyse-System™</span>
+                  <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Syntrix Analyse-System™</span>
                 </div>
-                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,3.5vw,26px)",fontWeight:900,color:"#0f172a",letterSpacing:"-0.025em",marginBottom:6}}>
+                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(18px,3vw,24px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:4}}>
                   Deine Analyse ist abgeschlossen{lead.name?`, ${lead.name.split(" ")[0]}`:""}.
                 </h2>
-                <p style={{fontSize:13,color:"#94a3b8"}}>Basierend auf deinen Angaben — systematisch ausgewertet</p>
+                <p style={{fontSize:12,color:"#334155"}}>Basierend auf deinen Angaben — systematisch ausgewertet</p>
               </div>
 
-              {/* SCORE CARD */}
-              <div className="result-card" style={{background:"#fff",border:"1px solid #f1f5f9",borderRadius:20,padding:"24px",marginBottom:12,boxShadow:"0 4px 20px rgba(15,23,42,0.06)"}}>
-                <div style={{display:"flex",alignItems:"center",gap:20,flexWrap:"wrap"}}>
-                  <div style={{position:"relative",width:100,height:100,flexShrink:0}}>
-                    <svg viewBox="0 0 100 100" style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}}>
-                      <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" strokeWidth="8"/>
-                      <circle cx="50" cy="50" r="42" fill="none"
+              {/* SCORE + MINI ANALYSE — nebeneinander */}
+              <div style={{display:"grid",gridTemplateColumns:"auto 1fr",gap:12,marginBottom:12,alignItems:"stretch"}}>
+                {/* Score Ring */}
+                <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:16,padding:"18px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8,minWidth:110}}>
+                  <div style={{position:"relative",width:88,height:88}}>
+                    <svg viewBox="0 0 88 88" style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}}>
+                      <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="7"/>
+                      <circle cx="44" cy="44" r="36" fill="none"
                         stroke={result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444"}
-                        strokeWidth="8" strokeLinecap="round"
-                        strokeDasharray={`${result.score/100*264} 264`}/>
+                        strokeWidth="7" strokeLinecap="round"
+                        strokeDasharray={`${result.score/100*226} 226`}
+                        style={{filter:`drop-shadow(0 0 6px ${result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444"})`}}/>
                     </svg>
                     <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-                      <div style={{fontSize:28,fontWeight:900,color:"#0f172a",fontFamily:"'Sora',sans-serif",lineHeight:1}}>{result.score}</div>
-                      <div style={{fontSize:10,color:"#94a3b8"}}>/100</div>
+                      <div style={{fontSize:24,fontWeight:900,color:"#f8fafc",fontFamily:"'Sora',sans-serif",lineHeight:1}}>{result.score}</div>
+                      <div style={{fontSize:9,color:"#475569"}}>/100</div>
                     </div>
                   </div>
-                  <div style={{flex:1,minWidth:160}}>
-                    <div style={{fontSize:10,fontWeight:700,color:"#94a3b8",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:4}}>Gesamtbewertung</div>
-                    <div style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(15px,2.5vw,20px)",fontWeight:800,color:result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444",marginBottom:6}}>{result.status}</div>
-                    <p style={{fontSize:13,color:"#64748b",lineHeight:1.6}}>
-                      {result.score>=70?"Solide Basis — jetzt geht es um Skalierung und Effizienz.":
-                       result.score>=40?"Einzelne Maßnahmen laufen, aber das System dahinter fehlt noch.":
-                       "Dein Marketing funktioniert noch nicht systematisch — enormes Aufholpotenzial."}
-                    </p>
-                  </div>
+                  <div style={{fontSize:12,fontWeight:700,color:result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444",textAlign:"center"}}>{result.status}</div>
                 </div>
-              </div>
 
-              {/* MINI ANALYSE */}
-              <div className="result-card" style={{background:"#fff",border:"1px solid #f1f5f9",borderRadius:20,padding:"20px 22px",marginBottom:12,boxShadow:"0 4px 20px rgba(15,23,42,0.06)"}}>
-                <div style={{fontSize:10,fontWeight:700,color:"#94a3b8",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:14}}>System-Analyse</div>
-                {[
-                  {label:"Leadgenerierung",score:result.score<40?15:result.score<70?45:78},
-                  {label:"Automatisierung",score:result.score<40?10:result.score<70?35:72},
-                  {label:"Conversion-Struktur",score:result.score<40?20:result.score<70?50:80},
-                ].map(({label,score})=>(
-                  <div key={label} style={{marginBottom:12}}>
-                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                      <span style={{fontSize:13,color:"#0f172a",fontWeight:500}}>{label}</span>
-                      <span style={{fontSize:12,fontWeight:700,color:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}}>{score>=70?"Gut":score>=40?"Mittel":"Schwach"}</span>
+                {/* Mini Analyse */}
+                <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:16,padding:"16px 18px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#334155",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:12}}>System-Analyse</div>
+                  {[
+                    {label:"Leadgenerierung",score:result.score<40?15:result.score<70?45:78},
+                    {label:"Automatisierung",score:result.score<40?10:result.score<70?35:72},
+                    {label:"Conversion",score:result.score<40?20:result.score<70?50:80},
+                  ].map(({label,score})=>(
+                    <div key={label} style={{marginBottom:10}}>
+                      <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                        <span style={{fontSize:11,color:"#94a3b8"}}>{label}</span>
+                        <span style={{fontSize:10,fontWeight:700,color:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}}>{score>=70?"Gut":score>=40?"Mittel":"Schwach"}</span>
+                      </div>
+                      <div style={{height:4,background:"rgba(255,255,255,0.06)",borderRadius:99}}>
+                        <div style={{height:"100%",width:`${score}%`,background:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444",borderRadius:99,boxShadow:`0 0 6px ${score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}`,transition:"width 1s ease"}}/>
+                      </div>
                     </div>
-                    <div style={{height:5,background:"#f1f5f9",borderRadius:99}}>
-                      <div style={{height:"100%",width:`${score}%`,background:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444",borderRadius:99,transition:"width 1s ease"}}/>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               {/* PROBLEM + POTENZIAL */}
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
-                <div className="result-card" style={{background:"#fff5f5",border:"1px solid #fecaca",borderRadius:16,padding:"16px",boxShadow:"0 2px 10px rgba(239,68,68,0.06)"}}>
-                  <div style={{fontSize:10,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>Handlungsfelder</div>
-                  {["Kein systematischer Funnel","Wenig Automatisierung","Unplanbare Leadgenerierung"].map(p=>(
-                    <div key={p} style={{display:"flex",gap:6,marginBottom:6}}>
-                      <span style={{color:"#ef4444",fontSize:11,flexShrink:0,marginTop:2}}>✗</span>
-                      <span style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{p}</span>
+                <div style={{background:"rgba(239,68,68,0.05)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:14,padding:"14px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Handlungsfelder</div>
+                  {["Kein system. Funnel","Wenig Automatisierung","Unplanbare Leads"].map(p=>(
+                    <div key={p} style={{display:"flex",gap:6,marginBottom:5}}>
+                      <span style={{color:"#ef4444",fontSize:10,flexShrink:0,marginTop:1}}>✗</span>
+                      <span style={{fontSize:11,color:"#64748b",lineHeight:1.4}}>{p}</span>
                     </div>
                   ))}
                 </div>
-                <div className="result-card" style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:16,padding:"16px",boxShadow:"0 2px 10px rgba(34,197,94,0.06)"}}>
-                  <div style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>Dein Potenzial</div>
-                  {["Planbare Anfragen aufbauen","Conversion steigern","Zeit durch Automation sparen"].map(p=>(
-                    <div key={p} style={{display:"flex",gap:6,marginBottom:6}}>
-                      <span style={{color:"#22c55e",fontSize:11,flexShrink:0,marginTop:2}}>→</span>
-                      <span style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{p}</span>
+                <div style={{background:"rgba(34,197,94,0.05)",border:"1px solid rgba(34,197,94,0.15)",borderRadius:14,padding:"14px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Dein Potenzial</div>
+                  {["Planbare Anfragen","Conversion steigern","Zeit sparen"].map(p=>(
+                    <div key={p} style={{display:"flex",gap:6,marginBottom:5}}>
+                      <span style={{color:"#22c55e",fontSize:10,flexShrink:0,marginTop:1}}>→</span>
+                      <span style={{fontSize:11,color:"#64748b",lineHeight:1.4}}>{p}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* EMAIL HINWEIS */}
-              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.06),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:16,padding:"20px",marginBottom:14,textAlign:"center"}}>
-                <div style={{fontSize:24,marginBottom:8}}>📩</div>
-                <div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800,color:"#0f172a",marginBottom:6}}>Deine detaillierte Auswertung ist bereits auf dem Weg</div>
-                <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:8}}>Du erhältst eine tiefere Analyse per E-Mail — mit konkreten Strategien, individuellen Handlungsempfehlungen und klaren nächsten Schritten.</p>
-                <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",borderRadius:8,padding:"4px 12px"}}>
-                  <span style={{fontSize:12}}>⏱</span>
-                  <span style={{fontSize:12,color:"#0369a1",fontWeight:600}}>Erstellung dauert ca. 2–3 Minuten</span>
+              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:14,padding:"16px 18px",marginBottom:12,display:"flex",gap:14,alignItems:"flex-start"}}>
+                <span style={{fontSize:20,flexShrink:0}}>📩</span>
+                <div>
+                  <div style={{fontFamily:"'Sora',sans-serif",fontSize:13,fontWeight:800,color:"#f1f5f9",marginBottom:4}}>Detaillierte Auswertung ist auf dem Weg</div>
+                  <p style={{fontSize:11,color:"#475569",lineHeight:1.6,marginBottom:6}}>Du erhältst eine tiefere Analyse per E-Mail — mit konkreten Strategien und Handlungsempfehlungen.</p>
+                  <div style={{display:"inline-flex",alignItems:"center",gap:5}}>
+                    <span style={{fontSize:10}}>⏱</span>
+                    <span style={{fontSize:10,color:"#0369a1",fontWeight:600}}>ca. 2–3 Minuten</span>
+                  </div>
                 </div>
               </div>
 
               {/* CTA */}
               <button onClick={goBook} className="cta-btn" style={{
                 width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
-                color:"#fff",border:"none",borderRadius:13,padding:"16px",
+                color:"#fff",border:"none",borderRadius:12,padding:"15px",
                 fontSize:15,fontWeight:700,cursor:"pointer",
                 fontFamily:"'Sora',sans-serif",
-                boxShadow:"0 6px 28px rgba(14,165,233,0.35)",marginBottom:8
+                boxShadow:"0 6px 24px rgba(14,165,233,0.35)",marginBottom:6
               }}>
                 Kostenloses Erstgespräch buchen →
               </button>
-              <p style={{fontSize:12,color:"#94a3b8",textAlign:"center"}}>Lass uns deine Analyse gemeinsam durchgehen und konkrete Maßnahmen ableiten.</p>
+              <p style={{fontSize:11,color:"#334155",textAlign:"center"}}>Lass uns deine Analyse gemeinsam durchgehen.</p>
             </div>
           )}
-        </div>
-      </div>
 
       {/* ── TRUST FOOTER ── */}
       <div style={{
@@ -949,12 +978,12 @@ function CalendlyPage({ leadData, onBack }) {
     return()=>{try{document.body.removeChild(s);}catch(e){}};
   },[]);
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",padding:"48px 20px",fontFamily:"'DM Sans',sans-serif"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",padding:"48px 20px",fontFamily:"DM Sans,sans-serif"}}>
       <link href={FONT} rel="stylesheet"/>
       <div style={{maxWidth:740,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:32}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
-            <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"'DM Sans',sans-serif"}}>← Zurück</button>
+            <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"DM Sans,sans-serif"}}>← Zurück</button>
             <button onClick={onBack} style={{display:"inline-flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
               <Logo size={32}/><span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:20,color:"#fff"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span></span>
             </button>
@@ -1018,7 +1047,7 @@ function LegalPage({ type, onBack }) {
   ];
   const secs=type==="impressum"?imp:ds;
   return (
-    <div style={{minHeight:"100vh",background:"#070c18",padding:"60px 20px",fontFamily:"'DM Sans',sans-serif"}}>
+    <div style={{minHeight:"100vh",background:"#070c18",padding:"60px 20px",fontFamily:"DM Sans,sans-serif"}}>
       <link href={FONT} rel="stylesheet"/>
       <div style={{maxWidth:700,margin:"0 auto"}}>
         <button onClick={onBack} style={{background:"none",border:"none",color:"#0ea5e9",fontSize:14,cursor:"pointer",marginBottom:30,fontWeight:600}}>← Zurück</button>
@@ -1429,7 +1458,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
   },[]);
   const bgs=[];  // unused, kept for compatibility
   return (
-    <div style={{fontFamily:"'DM Sans',sans-serif",background:"#fafafa",overflowX:"hidden"}}>
+    <div style={{fontFamily:"DM Sans,sans-serif",background:"#fafafa",overflowX:"hidden"}}>
       <style>{CSS}</style>
       <link href={FONT} rel="stylesheet"/>
 
@@ -1653,7 +1682,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
 
               <p style={{
                 fontSize:16,color:"#475569",lineHeight:1.85,
-                fontFamily:"'DM Sans',sans-serif",
+                fontFamily:"DM Sans,sans-serif",
                 marginBottom:16,maxWidth:460,
               }}>
                 Dein gesamtes Performance-Marketing steht und fällt mit deinem System.
@@ -1662,7 +1691,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               </p>
               <p style={{
                 fontSize:15,color:"#64748b",lineHeight:1.8,
-                fontFamily:"'DM Sans',sans-serif",
+                fontFamily:"DM Sans,sans-serif",
                 maxWidth:440,
               }}>
                 Nicht weil sie zu wenig machen. Sondern weil zentrale Zusammenhänge
@@ -1763,7 +1792,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               }}>Nah dran.</h3>
               <p style={{
                 fontSize:14,color:"#64748b",lineHeight:1.75,
-                fontFamily:"'DM Sans',sans-serif",
+                fontFamily:"DM Sans,sans-serif",
               }}>
                 Botschaften, die die echten Probleme deiner Zielgruppe treffen —
                 präzise formuliert, statt werblich aufgeblasen.
@@ -1793,7 +1822,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               }}>Sichtbar kompetent.</h3>
               <p style={{
                 fontSize:14,color:"#64748b",lineHeight:1.75,
-                fontFamily:"'DM Sans',sans-serif",
+                fontFamily:"DM Sans,sans-serif",
               }}>
                 Inhalte, die zeigen, dass du weißt wovon du redest —
                 ohne es laut aussprechen zu müssen.
@@ -1822,7 +1851,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               }}>Planbar wachsen.</h3>
               <p style={{
                 fontSize:14,color:"#64748b",lineHeight:1.75,
-                fontFamily:"'DM Sans',sans-serif",
+                fontFamily:"DM Sans,sans-serif",
               }}>
                 Strukturen, die deine Kundengewinnung planbar machen —
                 damit du weißt, was morgen kommt.

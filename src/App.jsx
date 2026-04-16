@@ -798,71 +798,118 @@ function PotenzialFunnel({ onBack, onCalendly }) {
 
           {/* ── ERGEBNIS (step 11) ── */}
           {step===11&&result&&(
-            <div>
-              <div style={{textAlign:"center",marginBottom:32}}>
-                <div style={{
-                  display:"inline-block",
-                  background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.25)",
-                  color:"#22c55e",borderRadius:100,padding:"5px 16px",
-                  fontSize:12,fontWeight:700,marginBottom:20
-                }}>✓ Analyse abgeschlossen</div>
-                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,32px)",fontWeight:900,color:"#0f172a",letterSpacing:"-0.025em"}}>
-                  Dein Ergebnis{lead.name?`, ${lead.name.split(" ")[0]}`:""}.
+            <div style={{animation:"fadeUp 0.6s ease both"}}>
+              <style>{`
+                .result-card{transition:box-shadow 0.25s,transform 0.25s}
+                .result-card:hover{box-shadow:0 8px 32px rgba(15,23,42,0.1);transform:translateY(-2px)}
+              `}</style>
+
+              {/* HEADER */}
+              <div style={{textAlign:"center",marginBottom:28}}>
+                <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"5px 14px",marginBottom:14}}>
+                  <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
+                  <span style={{fontSize:11,fontWeight:700,color:"#22c55e",letterSpacing:"0.08em",textTransform:"uppercase"}}>Syntrix Analyse-System™</span>
+                </div>
+                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,3.5vw,26px)",fontWeight:900,color:"#0f172a",letterSpacing:"-0.025em",marginBottom:6}}>
+                  Deine Analyse ist abgeschlossen{lead.name?`, ${lead.name.split(" ")[0]}`:""}.
                 </h2>
+                <p style={{fontSize:13,color:"#94a3b8"}}>Basierend auf deinen Angaben — systematisch ausgewertet</p>
               </div>
 
-              {/* Score Ring */}
-              <div style={{
-                background:"#fff",border:"1px solid #f1f5f9",borderRadius:24,
-                padding:"32px 24px",textAlign:"center",marginBottom:16,
-                boxShadow:"0 4px 24px rgba(15,23,42,0.06)"
-              }}>
-                <div style={{position:"relative",width:130,height:130,margin:"0 auto 16px"}}>
-                  <svg viewBox="0 0 130 130" style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}}>
-                    <circle cx="65" cy="65" r="56" fill="none" stroke="#f1f5f9" strokeWidth="10"/>
-                    <circle cx="65" cy="65" r="56" fill="none" stroke="url(#sg2)" strokeWidth="10" strokeLinecap="round" strokeDasharray={`${result.score/100*352} 352`}/>
-                    <defs><linearGradient id="sg2" x1="0" y1="0" x2="1" y2="0"><stop stopColor="#0ea5e9"/><stop offset="1" stopColor="#6366f1"/></linearGradient></defs>
-                  </svg>
-                  <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-                    <div style={{fontSize:36,fontWeight:900,color:"#0f172a",fontFamily:"'Sora',sans-serif",lineHeight:1}}>{result.score}</div>
-                    <div style={{fontSize:12,color:"#94a3b8",marginTop:2}}>/ 100</div>
+              {/* SCORE CARD */}
+              <div className="result-card" style={{background:"#fff",border:"1px solid #f1f5f9",borderRadius:20,padding:"24px",marginBottom:12,boxShadow:"0 4px 20px rgba(15,23,42,0.06)"}}>
+                <div style={{display:"flex",alignItems:"center",gap:20,flexWrap:"wrap"}}>
+                  <div style={{position:"relative",width:100,height:100,flexShrink:0}}>
+                    <svg viewBox="0 0 100 100" style={{position:"absolute",inset:0,transform:"rotate(-90deg)"}}>
+                      <circle cx="50" cy="50" r="42" fill="none" stroke="#f1f5f9" strokeWidth="8"/>
+                      <circle cx="50" cy="50" r="42" fill="none"
+                        stroke={result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444"}
+                        strokeWidth="8" strokeLinecap="round"
+                        strokeDasharray={`${result.score/100*264} 264`}/>
+                    </svg>
+                    <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
+                      <div style={{fontSize:28,fontWeight:900,color:"#0f172a",fontFamily:"'Sora',sans-serif",lineHeight:1}}>{result.score}</div>
+                      <div style={{fontSize:10,color:"#94a3b8"}}>/100</div>
+                    </div>
+                  </div>
+                  <div style={{flex:1,minWidth:160}}>
+                    <div style={{fontSize:10,fontWeight:700,color:"#94a3b8",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:4}}>Gesamtbewertung</div>
+                    <div style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(15px,2.5vw,20px)",fontWeight:800,color:result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444",marginBottom:6}}>{result.status}</div>
+                    <p style={{fontSize:13,color:"#64748b",lineHeight:1.6}}>
+                      {result.score>=70?"Solide Basis — jetzt geht es um Skalierung und Effizienz.":
+                       result.score>=40?"Einzelne Maßnahmen laufen, aber das System dahinter fehlt noch.":
+                       "Dein Marketing funktioniert noch nicht systematisch — enormes Aufholpotenzial."}
+                    </p>
                   </div>
                 </div>
-                <div style={{fontSize:18,fontWeight:700,color:result.statusColor,fontFamily:"'Sora',sans-serif"}}>{result.status}</div>
               </div>
 
-              {/* Ergebnis-Karten */}
-              <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+              {/* MINI ANALYSE */}
+              <div className="result-card" style={{background:"#fff",border:"1px solid #f1f5f9",borderRadius:20,padding:"20px 22px",marginBottom:12,boxShadow:"0 4px 20px rgba(15,23,42,0.06)"}}>
+                <div style={{fontSize:10,fontWeight:700,color:"#94a3b8",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:14}}>System-Analyse</div>
                 {[
-                  {l:"Größtes Problem",v:result.problem,c:"#ef4444",bg:"#fff5f5",border:"#fecaca"},
-                  {l:"Größtes Potenzial",v:result.opportunity,c:"#0ea5e9",bg:"#f0f9ff",border:"#bae6fd"},
-                  {l:"Empfohlener nächster Schritt",v:result.next,c:"#22c55e",bg:"#f0fdf4",border:"#bbf7d0"}
-                ].map(({l,v,c,bg,border})=>(
-                  <div key={l} style={{
-                    background:bg,border:`1px solid ${border}`,
-                    borderRadius:14,padding:"16px 18px"
-                  }}>
-                    <div style={{fontSize:10,fontWeight:700,color:c,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>{l}</div>
-                    <div style={{fontSize:14,color:"#0f172a",lineHeight:1.6,fontWeight:500}}>{v}</div>
+                  {label:"Leadgenerierung",score:result.score<40?15:result.score<70?45:78},
+                  {label:"Automatisierung",score:result.score<40?10:result.score<70?35:72},
+                  {label:"Conversion-Struktur",score:result.score<40?20:result.score<70?50:80},
+                ].map(({label,score})=>(
+                  <div key={label} style={{marginBottom:12}}>
+                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
+                      <span style={{fontSize:13,color:"#0f172a",fontWeight:500}}>{label}</span>
+                      <span style={{fontSize:12,fontWeight:700,color:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}}>{score>=70?"Gut":score>=40?"Mittel":"Schwach"}</span>
+                    </div>
+                    <div style={{height:5,background:"#f1f5f9",borderRadius:99}}>
+                      <div style={{height:"100%",width:`${score}%`,background:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444",borderRadius:99,transition:"width 1s ease"}}/>
+                    </div>
                   </div>
                 ))}
               </div>
 
+              {/* PROBLEM + POTENZIAL */}
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
+                <div className="result-card" style={{background:"#fff5f5",border:"1px solid #fecaca",borderRadius:16,padding:"16px",boxShadow:"0 2px 10px rgba(239,68,68,0.06)"}}>
+                  <div style={{fontSize:10,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>Handlungsfelder</div>
+                  {["Kein systematischer Funnel","Wenig Automatisierung","Unplanbare Leadgenerierung"].map(p=>(
+                    <div key={p} style={{display:"flex",gap:6,marginBottom:6}}>
+                      <span style={{color:"#ef4444",fontSize:11,flexShrink:0,marginTop:2}}>✗</span>
+                      <span style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{p}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="result-card" style={{background:"#f0fdf4",border:"1px solid #bbf7d0",borderRadius:16,padding:"16px",boxShadow:"0 2px 10px rgba(34,197,94,0.06)"}}>
+                  <div style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>Dein Potenzial</div>
+                  {["Planbare Anfragen aufbauen","Conversion steigern","Zeit durch Automation sparen"].map(p=>(
+                    <div key={p} style={{display:"flex",gap:6,marginBottom:6}}>
+                      <span style={{color:"#22c55e",fontSize:11,flexShrink:0,marginTop:2}}>→</span>
+                      <span style={{fontSize:12,color:"#64748b",lineHeight:1.5}}>{p}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* EMAIL HINWEIS */}
+              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.06),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:16,padding:"20px",marginBottom:14,textAlign:"center"}}>
+                <div style={{fontSize:24,marginBottom:8}}>📩</div>
+                <div style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:800,color:"#0f172a",marginBottom:6}}>Deine detaillierte Auswertung ist bereits auf dem Weg</div>
+                <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:8}}>Du erhältst eine tiefere Analyse per E-Mail — mit konkreten Strategien, individuellen Handlungsempfehlungen und klaren nächsten Schritten.</p>
+                <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",borderRadius:8,padding:"4px 12px"}}>
+                  <span style={{fontSize:12}}>⏱</span>
+                  <span style={{fontSize:12,color:"#0369a1",fontWeight:600}}>Erstellung dauert ca. 2–3 Minuten</span>
+                </div>
+              </div>
+
+              {/* CTA */}
               <button onClick={goBook} className="cta-btn" style={{
-                width:"100%",
-                background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
-                color:"#fff",border:"none",borderRadius:13,padding:"17px",
-                fontSize:16,fontWeight:700,cursor:"pointer",
+                width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
+                color:"#fff",border:"none",borderRadius:13,padding:"16px",
+                fontSize:15,fontWeight:700,cursor:"pointer",
                 fontFamily:"'Sora',sans-serif",
-                boxShadow:"0 6px 28px rgba(14,165,233,0.35)",
-                marginBottom:10
+                boxShadow:"0 6px 28px rgba(14,165,233,0.35)",marginBottom:8
               }}>
-                Jetzt unverbindliches Erstgespräch buchen →
+                Kostenloses Erstgespräch buchen →
               </button>
-              <p style={{fontSize:12,color:"#94a3b8",textAlign:"center"}}>Kostenlos · 30 Minuten · Konkrete Strategie</p>
+              <p style={{fontSize:12,color:"#94a3b8",textAlign:"center"}}>Lass uns deine Analyse gemeinsam durchgehen und konkrete Maßnahmen ableiten.</p>
             </div>
           )}
-
         </div>
       </div>
 

@@ -594,17 +594,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   };
 
   const goBook=()=>{
-    fetch("https://hook.eu1.make.com/czp5fuht1b3uwx1o3dk7bf65juot5qt2",{
-      method:"POST",mode:"no-cors",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        name:lead.name,email:lead.email,phone:lead.phone||"–",
-        score:result?.score+"/100",status:result?.status,
-        problem:result?.problem,opportunity:result?.opportunity,
-        quelle:"Potenzialanalyse syntrixdigital.de",
-        timestamp:new Date().toISOString()
-      })
-    }).catch(()=>{});
+    // Webhook bereits bei submit() gesendet — kein zweiter Call nötig
     onCalendly({...lead,...result,params:""});
   };
 

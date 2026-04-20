@@ -149,9 +149,11 @@ function ServiceModal({ onClose, onFunnel }) {
   const [step, setStep]   = useState(1);
   const [d, setD]         = useState({ selected_services:[], goal:"", current_status:"", collaboration_type:"", budget:"", timeline:"", name:"", email:"", phone:"", message:"" });
   const [sent, setSent]   = useState(false);
+  const [mEmailTouched, setMEmailTouched] = useState(false);
   const set1 = (k,v) => setD(p=>({...p,[k]:v}));
   const tog  = id  => setD(p=>({...p,selected_services:p.selected_services.includes(id)?p.selected_services.filter(x=>x!==id):[...p.selected_services,id]}));
-  const canNext = [d.selected_services.length>0, d.goal&&d.current_status, d.collaboration_type&&d.budget&&d.timeline, d.name.trim()&&d.email.trim()];
+  const isModalEmailValid = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const canNext = [d.selected_services.length>0, d.goal&&d.current_status, d.collaboration_type&&d.budget&&d.timeline, d.name.trim()&&isModalEmailValid(d.email)];
 
   const Opt = ({k,v,label,badge}) => (
     <button onClick={()=>set1(k,v)} className="choice-opt" style={{width:"100%",textAlign:"left",padding:"12px 16px",borderRadius:10,border:d[k]===v?"1.5px solid #0ea5e9":"1px solid #e2e8f0",background:d[k]===v?"rgba(14,165,233,0.06)":"#fafafa",cursor:"pointer",fontSize:14,color:"#0f172a",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8,fontFamily:"DM Sans,sans-serif"}}>
@@ -266,7 +268,20 @@ function ServiceModal({ onClose, onFunnel }) {
               {[{l:"Name *",k:"name",ph:"Max Mustermann",t:"text"},{l:"E-Mail *",k:"email",ph:"max@firma.de",t:"email"},{l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"}].map(({l,k,ph,t})=>(
                 <div key={k} style={{marginBottom:12}}>
                   <label style={{fontSize:12,color:"#94a3b8",display:"block",marginBottom:5}}>{l}</label>
-                  <input value={d[k]} onChange={e=>set1(k,e.target.value)} placeholder={ph} type={t} style={{width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #e2e8f0",fontSize:14,outline:"none",boxSizing:"border-box",fontFamily:"DM Sans,sans-serif",color:"#0f172a"}}/>
+                  <input
+                    value={d[k]}
+                    onChange={e=>{set1(k,e.target.value);if(k==="email")setMEmailTouched(true);}}
+                    onBlur={()=>{if(k==="email")setMEmailTouched(true);}}
+                    placeholder={ph}
+                    type={t}
+                    style={{width:"100%",padding:"12px 14px",borderRadius:10,border:k==="email"&&mEmailTouched&&d.email&&!isModalEmailValid(d.email)?"1px solid #ef4444":"1px solid #e2e8f0",fontSize:14,outline:"none",boxSizing:"border-box",fontFamily:"DM Sans,sans-serif",color:"#0f172a"}}
+                  />
+                  {k==="email"&&mEmailTouched&&d.email&&!isModalEmailValid(d.email)&&(
+                    <div style={{display:"flex",alignItems:"center",gap:4,marginTop:4}}>
+                      <span style={{fontSize:10,color:"#ef4444"}}>✗</span>
+                      <span style={{fontSize:11,color:"#ef4444"}}>Bitte eine gültige E-Mail-Adresse eingeben</span>
+                    </div>
+                  )}
                 </div>
               ))}
               <div style={{marginBottom:14}}>
@@ -537,6 +552,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const [result,setResult]=useState(null);
   const [vis,setVis]=useState(true);
   const [dir,setDir]=useState(1);
+  const [emailTouched,setEmailTouched]=useState(false);
+  const isEmailValid=(v)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const total=10,q=QS[step];
 
   const pick=(opt)=>{
@@ -801,24 +818,35 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                       <label style={{fontSize:11,fontWeight:700,color:"#475569",display:"block",marginBottom:8,letterSpacing:"0.06em",textTransform:"uppercase"}}>{l}</label>
                       <input
                         value={lead[k]}
-                        onChange={e=>setLead(p=>({...p,[k]:e.target.value}))}
+                        onChange={e=>{
+                          setLead(p=>({...p,[k]:e.target.value}));
+                          if(k==="email") setEmailTouched(true);
+                        }}
+                        onBlur={()=>{ if(k==="email") setEmailTouched(true); }}
                         placeholder={ph}
                         type={t}
                         className="premium-input"
+                        style={{borderColor:k==="email"&&emailTouched&&lead.email&&!isEmailValid(lead.email)?"#ef4444":undefined}}
                       />
+                      {k==="email"&&emailTouched&&lead.email&&!isEmailValid(lead.email)&&(
+                        <div style={{display:"flex",alignItems:"center",gap:5,marginTop:6}}>
+                          <span style={{fontSize:10,color:"#ef4444"}}>✗</span>
+                          <span style={{fontSize:11,color:"#ef4444"}}>Bitte eine gültige E-Mail-Adresse eingeben</span>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
                 <button
                   onClick={submit}
-                  disabled={!lead.name.trim()||!lead.email.trim()}
+                  disabled={!lead.name.trim()||!isEmailValid(lead.email)}
                   style={{
                     width:"100%",marginTop:20,
-                    background:lead.name.trim()&&lead.email.trim()
+                    background:lead.name.trim()&&isEmailValid(lead.email)
                       ?"linear-gradient(135deg,#0ea5e9,#6366f1)"
                       :"rgba(255,255,255,0.04)",
-                    color:lead.name.trim()&&lead.email.trim()?"#fff":"#334155",
-                    border:lead.name.trim()&&lead.email.trim()?"none":"1px solid rgba(255,255,255,0.06)",
+                    color:lead.name.trim()&&isEmailValid(lead.email)?"#fff":"#334155",
+                    border:lead.name.trim()&&isEmailValid(lead.email)?"none":"1px solid rgba(255,255,255,0.06)",
                     borderRadius:12,padding:"15px",
                     fontSize:15,fontWeight:700,
                     cursor:lead.name.trim()&&lead.email.trim()?"pointer":"not-allowed",

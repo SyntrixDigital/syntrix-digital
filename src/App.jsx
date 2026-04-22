@@ -1044,41 +1044,100 @@ function CalendlyPage({ leadData, onBack }) {
 // ── LEGAL ─────────────────────────────────────────────────────────────────────
 function LegalPage({ type, onBack }) {
   const imp=[
-    ["Angaben gemäß § 5 TMG",["Johannes Rempel","Syntrix Digital (Einzelunternehmen)","Kunibertweg 13","59494 Soest","Deutschland"]],
-    ["Kontakt",["Telefon: +49 2921 370 20 21","E-Mail: johannes@syntrixdigital.de","Web: www.syntrixdigital.de"]],
-    ["Steuerliche Angaben",[
-      "Einzelunternehmen gemäß § 15 EStG.",
-      "Regelbesteuerung — Umsatzsteuer wird ausgewiesen und abgeführt.",
-      "Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: wird nachgereicht",
-      "Steuernummer: wird nachgereicht"
+    ["Angaben gemäß § 5 TMG",[
+      "Syntrix Digital · Inhaber: Johannes Rempel",
+      "Kunibertweg 13 · 59494 Soest · Deutschland"
     ]],
-    ["Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",["Johannes Rempel, Kunibertweg 13, 59494 Soest"]],
-    ["Haftung für Inhalte",["Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte nach den allgemeinen Gesetzen verantwortlich."]],
-    ["Haftung für Links",["Unser Angebot enthält Links zu externen Websites. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich."]],
-    ["Urheberrecht",["Die durch den Seitenbetreiber erstellten Inhalte unterliegen dem deutschen Urheberrecht. Vervielfältigung und Verbreitung bedürfen der schriftlichen Zustimmung des Autors."]],
-    ["Streitschlichtung",["Die EU-Kommission stellt eine Plattform zur Online-Streitbeilegung bereit: https://ec.europa.eu/consumers/odr/","Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."]]
+    ["Kontakt",[
+      "Telefon: +49 2921 370 20 21",
+      "E-Mail: info@syntrixdigital.de"
+    ]],
+    ["Umsatzsteuer",[
+      "Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: derzeit nicht vorhanden"
+    ]],
+    ["Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",[
+      "Johannes Rempel · Anschrift wie oben"
+    ]],
+    ["Hinweis gemäß § 36 VSBG",[
+      "Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",
+      "EU-Plattform zur Online-Streitbeilegung: https://ec.europa.eu/consumers/odr/"
+    ]]
   ];
   const ds=[
-    ["1. Verantwortlicher",["Johannes Rempel · Syntrix Digital (Einzelunternehmen)","Kunibertweg 13, 59494 Soest","E-Mail: johannes@syntrixdigital.de","Telefon: +49 2921 370 20 21"]],
-    ["2. Hosting (IONOS)",["Diese Website wird gehostet bei IONOS SE, Elgendorfer Str. 57, 56410 Montabaur. Bei Aufruf der Website werden Server-Logfiles erhoben (IP-Adresse, Browsertyp, Datum/Uhrzeit). Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO."]],
-    ["3. SSL-/TLS-Verschlüsselung",["Diese Website nutzt SSL-/TLS-Verschlüsselung für eine sichere Datenübertragung."]],
-    ["4. Kontaktformular & E-Mail",["Bei Kontaktaufnahme per E-Mail oder Formular werden Name, E-Mail, ggf. Telefonnummer und Nachricht zur Bearbeitung gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO. Keine Weitergabe an Dritte."]],
-    ["5. Terminbuchung über Calendly",["Für die Terminbuchung nutzen wir Calendly LLC, 271 17th St NW, Atlanta, GA 30363, USA. Bei Buchung werden Name und E-Mail übermittelt. Mögliche Datenübermittlung in die USA. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO. Datenschutz: https://calendly.com/privacy"]],
-    ["6. Formulardaten & Automatisierung",["Anfragen werden zur Verarbeitung an Make.com und HubSpot Inc. weitergeleitet. Dies dient ausschließlich der Anfragenbearbeitung. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO."]],
-    ["7. Webanalyse (Plausible Analytics)",["Diese Website nutzt Plausible Analytics — ein datenschutzfreundliches Tool ohne Cookies und ohne Erfassung personenbezogener Daten. Keine IP-Adressen werden gespeichert. Weitere Infos: https://plausible.io/privacy"]],
-    ["8. Cookies & Consent (CookieHub)",["Technisch notwendige Cookies werden ohne Einwilligung gesetzt. Für alle weiteren Cookies wird Ihre Einwilligung über CookieHub eingeholt. Rechtsgrundlage: Art. 6 Abs. 1 lit. a und f DSGVO."]],
-    ["9. Ihre Rechte",["Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO).","Kontakt: johannes@syntrixdigital.de"]],
-    ["10. Beschwerderecht",["Sie können sich bei der Landesbeauftragten für Datenschutz und Informationsfreiheit NRW beschweren: www.ldi.nrw.de"]],
-    ["11. Aktualität",["Diese Datenschutzerklärung gilt ab April 2026 und kann bei Bedarf angepasst werden."]]
+    ["1. Verantwortlicher",[
+      "Johannes Rempel",
+      "Syntrix Digital (Einzelunternehmen)",
+      "Kunibertweg 13, 59494 Soest, Deutschland",
+      "E-Mail: johannes@syntrixdigital.de",
+      "Telefon: +49 2921 370 20 21"
+    ]],
+    ["2. Hosting",[
+      "Diese Website wird bei IONOS SE, Elgendorfer Str. 57, 56410 Montabaur gehostet. Beim Aufruf der Website werden automatisch Server-Logfiles erfasst (z. B. IP-Adresse, Browsertyp, Datum und Uhrzeit).",
+      "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an stabiler und sicherer Bereitstellung der Website)."
+    ]],
+    ["3. SSL-/TLS-Verschlüsselung",[
+      "Diese Website nutzt eine SSL- bzw. TLS-Verschlüsselung zur sicheren Übertragung vertraulicher Inhalte."
+    ]],
+    ["4. Kontaktaufnahme",[
+      "Wenn Sie uns per E-Mail oder über ein Formular kontaktieren, werden die von Ihnen übermittelten Daten (z. B. Name, E-Mail-Adresse, Telefonnummer, Inhalt der Anfrage) zum Zweck der Bearbeitung gespeichert.",
+      "Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO (vorvertragliche Maßnahmen) sowie Art. 6 Abs. 1 lit. f DSGVO."
+    ]],
+    ["5. Datenverarbeitung durch eingesetzte Tools",[
+      "Zur Bearbeitung von Anfragen nutzen wir folgende externe Dienstleister: Make.com (Automatisierung), HubSpot Inc. (CRM), Microsoft Outlook (E-Mail-Kommunikation).",
+      "Die Verarbeitung erfolgt ausschließlich zum Zweck der Bearbeitung Ihrer Anfrage."
+    ]],
+    ["6. Terminbuchung über Calendly",[
+      "Für die Terminbuchung nutzen wir Calendly LLC, 271 17th St NW, Atlanta, GA 30363, USA. Bei der Buchung werden personenbezogene Daten (z. B. Name, E-Mail-Adresse) verarbeitet.",
+      "Weitere Informationen: https://calendly.com/privacy"
+    ]],
+    ["7. Webanalyse (Plausible Analytics)",[
+      "Diese Website nutzt Plausible Analytics, ein datenschutzfreundliches Analyse-Tool. Plausible verwendet keine Cookies und speichert keine personenbezogenen Daten wie vollständige IP-Adressen.",
+      "Weitere Informationen: https://plausible.io/privacy"
+    ]],
+    ["8. Cookies & Consent",[
+      "Diese Website verwendet technisch notwendige Cookies. Für alle weiteren Technologien wird – sofern erforderlich – Ihre Einwilligung über ein Consent-Tool eingeholt.",
+      "Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO sowie Art. 6 Abs. 1 lit. f DSGVO."
+    ]],
+    ["9. Datenübermittlung in Drittländer",[
+      "Einige der eingesetzten Dienste haben ihren Sitz außerhalb der EU (insbesondere in den USA). Die Datenübermittlung erfolgt auf Grundlage geeigneter Garantien gemäß Art. 46 DSGVO (z. B. Standardvertragsklauseln)."
+    ]],
+    ["10. Speicherdauer",[
+      "Personenbezogene Daten werden nur so lange gespeichert, wie dies für die jeweiligen Zwecke erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen."
+    ]],
+    ["11. Ihre Rechte",[
+      "Sie haben das Recht auf: Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch (Art. 21 DSGVO).",
+      "Zur Ausübung Ihrer Rechte: johannes@syntrixdigital.de"
+    ]],
+    ["12. Beschwerderecht",[
+      "Sie haben das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren.",
+      "Landesbeauftragte für Datenschutz und Informationsfreiheit NRW: https://www.ldi.nrw.de"
+    ]],
+    ["13. Automatisierte Datenverarbeitung und KI-Analyse",[
+      "Zur Auswertung von Anfragen nutzen wir KI-gestützte Analyseverfahren (Claude API von Anthropic). Dabei können übermittelte Daten automatisiert verarbeitet und analysiert werden.",
+      "Die Ergebnisse können Ihnen per E-Mail übermittelt werden. Es findet keine ausschließlich automatisierte Entscheidungsfindung im Sinne des Art. 22 DSGVO statt.",
+      "Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO."
+    ]],
+    ["14. Aktualität",[
+      "Diese Datenschutzerklärung ist aktuell gültig (Stand: April 2026) und kann bei Änderungen angepasst werden."
+    ]]
   ];
   const secs=type==="impressum"?imp:ds;
   return (
     <div style={{minHeight:"100vh",background:"#070c18",padding:"60px 20px",fontFamily:"DM Sans,sans-serif"}}>
       <link href={FONT} rel="stylesheet"/>
       <div style={{maxWidth:700,margin:"0 auto"}}>
-        <button onClick={onBack} style={{background:"none",border:"none",color:"#0ea5e9",fontSize:14,cursor:"pointer",marginBottom:30,fontWeight:600}}>← Zurück</button>
+
         <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:30,fontWeight:800,color:"#fff",marginBottom:30}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</h1>
-        {secs.map(([t,items])=>(<div key={t} style={{marginBottom:26}}><h2 style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:700,color:"#fff",marginBottom:9}}>{t}</h2>{items.map((it,i)=><p key={i} style={{fontSize:13,color:"#475569",lineHeight:1.8,marginBottom:4}}>{it}</p>)}</div>))}
+        {secs.map(([t,items])=>(<div key={t} style={{marginBottom:26}}><h2 style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:700,color:"#fff",marginBottom:9}}>{t}</h2>{items.map((it,i)=>{
+  const urlMatch = it.match(/(https?:\/\/[^\s]+)/);
+  if(urlMatch) {
+    const parts = it.split(urlMatch[0]);
+    return <p key={i} style={{fontSize:13,color:"#475569",lineHeight:1.8,marginBottom:4}}>
+      {parts[0]}<a href={urlMatch[0]} target="_blank" rel="noopener noreferrer" style={{color:"#0ea5e9",textDecoration:"none"}}>{urlMatch[0]}</a>{parts[1]}
+    </p>;
+  }
+  return <p key={i} style={{fontSize:13,color:"#475569",lineHeight:1.8,marginBottom:4}}>{it}</p>;
+})}</div>))}
       </div>
     </div>
   );
@@ -2142,10 +2201,19 @@ export default function App() {
 
   const goCalendly = (d) => { setLead(d); setPage("calendly"); };
 
+  const [scrollPos, setScrollPos] = useState(0);
+
   const navigate = (p) => {
-    if(p === "impressum") window.location.hash = "#/impressum";
-    else if(p === "datenschutz") window.location.hash = "#/datenschutz";
-    else window.location.hash = "";
+    if(p === "impressum" || p === "datenschutz") {
+      setScrollPos(window.scrollY);
+      window.location.hash = p === "impressum" ? "#/impressum" : "#/datenschutz";
+      window.scrollTo(0,0);
+    } else {
+      window.location.hash = "";
+      setPage(p);
+      setTimeout(()=>window.scrollTo(0, scrollPos), 50);
+      return;
+    }
     setPage(p);
   };
 

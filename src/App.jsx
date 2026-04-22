@@ -1046,7 +1046,12 @@ function LegalPage({ type, onBack }) {
   const imp=[
     ["Angaben gemäß § 5 TMG",["Johannes Rempel","Syntrix Digital (Einzelunternehmen)","Kunibertweg 13","59494 Soest","Deutschland"]],
     ["Kontakt",["Telefon: +49 2921 370 20 21","E-Mail: johannes@syntrixdigital.de","Web: www.syntrixdigital.de"]],
-    ["Steuerliche Angaben",["Gemäß § 19 UStG wird keine Umsatzsteuer berechnet (Kleinunternehmerregelung).","Steuernummer: wird nachgereicht"]],
+    ["Steuerliche Angaben",[
+      "Einzelunternehmen gemäß § 15 EStG.",
+      "Regelbesteuerung — Umsatzsteuer wird ausgewiesen und abgeführt.",
+      "Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: wird nachgereicht",
+      "Steuernummer: wird nachgereicht"
+    ]],
     ["Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV",["Johannes Rempel, Kunibertweg 13, 59494 Soest"]],
     ["Haftung für Inhalte",["Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte nach den allgemeinen Gesetzen verantwortlich."]],
     ["Haftung für Links",["Unser Angebot enthält Links zu externen Websites. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich."]],
@@ -1994,10 +1999,14 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                   Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span>
                 </span>
               </button>
-              <div>
+              <div style={{display:"flex",flexDirection:"column",gap:8}}>
                 <a href="mailto:info@syntrixdigital.de" style={{display:"inline-flex",alignItems:"center",gap:8,color:"#475569",fontSize:13,textDecoration:"none"}}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="2" stroke="#475569" strokeWidth="1.2"/><path d="M1 5l6 3.5L13 5" stroke="#475569" strokeWidth="1.2" strokeLinecap="round"/></svg>
                   info@syntrixdigital.de
+                </a>
+                <a href="tel:+4929213702021" style={{display:"inline-flex",alignItems:"center",gap:8,color:"#475569",fontSize:13,textDecoration:"none"}}>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2h3l1.5 3.5-1.8 1.1A9 9 0 007.4 9.3l1.1-1.8L12 9v3a1 1 0 01-1 1A10 10 0 011 3a1 1 0 011-1z" stroke="#475569" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  +49 2921 370 20 21
                 </a>
               </div>
             </div>
@@ -2016,7 +2025,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             </div>
           </div>
           <div style={{borderTop:"1px solid rgba(255,255,255,0.05)",paddingTop:20,textAlign:"center"}}>
-            <span style={{fontSize:12,color:"#1e3a5f"}}>© 2026 Syntrix Digital · Soest</span>
+            <span style={{fontSize:12,color:"#1e3a5f"}}></span>
           </div>
         </div>
       </footer>
@@ -2075,7 +2084,13 @@ const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"
 const FAVICON_URL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(FAVICON_SVG);
 
 export default function App() {
-  const [page,setPage]       = useState("home");
+  const getInitialPage = () => {
+    const hash = window.location.hash;
+    if(hash === "#/impressum") return "impressum";
+    if(hash === "#/datenschutz") return "datenschutz";
+    return "home";
+  };
+  const [page,setPage] = useState(getInitialPage);
   const [showModal,setModal] = useState(false);
   const [leadData,setLead]   = useState(null);
 
@@ -2127,14 +2142,21 @@ export default function App() {
 
   const goCalendly = (d) => { setLead(d); setPage("calendly"); };
 
+  const navigate = (p) => {
+    if(p === "impressum") window.location.hash = "#/impressum";
+    else if(p === "datenschutz") window.location.hash = "#/datenschutz";
+    else window.location.hash = "";
+    setPage(p);
+  };
+
   if(page==="funnel")     return <PotenzialFunnel onBack={()=>setPage("home")} onCalendly={goCalendly}/>;
   if(page==="calendly")   return <CalendlyPage leadData={leadData} onBack={()=>setPage("home")}/>;
-  if(page==="impressum")  return <LegalPage type="impressum"  onBack={()=>setPage("home")}/>;
-  if(page==="datenschutz")return <LegalPage type="datenschutz" onBack={()=>setPage("home")}/>;
+  if(page==="impressum")  return <LegalPage type="impressum"  onBack={()=>navigate("home")}/>;
+  if(page==="datenschutz")return <LegalPage type="datenschutz" onBack={()=>navigate("home")}/>;
   return (
     <>
       {showModal&&<ServiceModal onClose={()=>setModal(false)} onFunnel={()=>{setModal(false);setPage("funnel");}}/>}
-      <LandingPage onFunnel={()=>setPage("funnel")} onPage={setPage} onModal={()=>setModal(true)}/>
+      <LandingPage onFunnel={()=>setPage("funnel")} onPage={navigate} onModal={()=>setModal(true)}/>
     </>
   );
 }

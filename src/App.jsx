@@ -1127,7 +1127,7 @@ function LegalPage({ type, onBack }) {
       {/* Header mit Logo */}
       <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,12,24,0.97)",backdropFilter:"blur(12px)",borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"16px 24px",marginBottom:40}}>
         <div style={{maxWidth:700,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
+          <button onClick={()=>{onBack();setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),100);}} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
             <Logo size={26}/>
             <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
           </button>
@@ -2211,18 +2211,31 @@ export default function App() {
 
   const [scrollPos, setScrollPos] = useState(0);
 
+  // Browser-Zurück-Pfeil abfangen
+  useEffect(()=>{
+    const handlePop = (e) => {
+      const state = e.state;
+      const targetPage = state?.page || "home";
+      setPage(targetPage);
+      // Browser stellt Scroll-Position selbst wieder her
+    };
+    window.addEventListener("popstate", handlePop);
+    if(!window.history.state) {
+      window.history.replaceState({page:"home"}, "", "/");
+    }
+    return () => window.removeEventListener("popstate", handlePop);
+  }, []);
+
   const navigate = (p) => {
     if(p === "impressum" || p === "datenschutz") {
-      setScrollPos(window.scrollY);
-      window.location.hash = p === "impressum" ? "#/impressum" : "#/datenschutz";
+      window.history.pushState({page:p}, "", "/"+p);
       window.scrollTo(0,0);
-    } else {
-      window.location.hash = "";
       setPage(p);
-      setTimeout(()=>window.scrollTo(0, scrollPos), 100);
-      return;
+    } else {
+      window.history.pushState({page:"home"}, "", "/");
+      setPage("home");
+      // Kein manuelles Scrollen — Browser macht es selbst
     }
-    setPage(p);
   };
 
   if(page==="funnel")     return <PotenzialFunnel onBack={()=>setPage("home")} onCalendly={goCalendly}/>;

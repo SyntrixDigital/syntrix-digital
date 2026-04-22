@@ -1060,7 +1060,6 @@ function LegalPage({ type, onBack }) {
     ]],
     ["Hinweis gemäß § 36 VSBG",[
       "Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",
-      "EU-Plattform zur Online-Streitbeilegung: https://ec.europa.eu/consumers/odr/"
     ]]
   ];
   const ds=[
@@ -1123,10 +1122,19 @@ function LegalPage({ type, onBack }) {
   ];
   const secs=type==="impressum"?imp:ds;
   return (
-    <div style={{minHeight:"100vh",background:"#070c18",padding:"60px 20px",fontFamily:"DM Sans,sans-serif"}}>
+    <div style={{minHeight:"100vh",background:"#070c18",padding:"0 20px 60px",fontFamily:"DM Sans,sans-serif"}}>
       <link href={FONT} rel="stylesheet"/>
+      {/* Header mit Logo */}
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,12,24,0.97)",backdropFilter:"blur(12px)",borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"16px 24px",marginBottom:40}}>
+        <div style={{maxWidth:700,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
+            <Logo size={26}/>
+            <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
+          </button>
+          <span style={{fontSize:12,color:"#334155"}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</span>
+        </div>
+      </div>
       <div style={{maxWidth:700,margin:"0 auto"}}>
-
         <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:30,fontWeight:800,color:"#fff",marginBottom:30}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</h1>
         {secs.map(([t,items])=>(<div key={t} style={{marginBottom:26}}><h2 style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:700,color:"#fff",marginBottom:9}}>{t}</h2>{items.map((it,i)=>{
   const urlMatch = it.match(/(https?:\/\/[^\s]+)/);
@@ -2211,7 +2219,7 @@ export default function App() {
     } else {
       window.location.hash = "";
       setPage(p);
-      setTimeout(()=>window.scrollTo(0, scrollPos), 50);
+      setTimeout(()=>window.scrollTo(0, scrollPos), 100);
       return;
     }
     setPage(p);

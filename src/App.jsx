@@ -1573,99 +1573,67 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       <link href={FONT} rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:10000,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.7)",backdropFilter:"blur(14px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
-        <div style={{maxWidth:1140,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,padding:"0 5vw"}}>
-          <button onClick={()=>window.scrollTo({top:0,behavior:"smooth"})} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
+      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:10000,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.85)",backdropFilter:"blur(16px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
+        <div style={{maxWidth:1140,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,padding:"0 20px"}}>
+          {/* LOGO */}
+          <button onClick={()=>{setMenuOpen(false);window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0,zIndex:10001}}>
             <Logo size={28}/>
             <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:18,color:scrolled?"#0f172a":"#f8fafc"}}>
               Syntrix<span style={{color:scrolled?"#0ea5e9":"#38bdf8"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:scrolled?"#94a3b8":"rgba(148,163,184,0.7)"}}>Digital</span>
             </span>
           </button>
-          <div style={{display:"flex",gap:16,alignItems:"center"}}>
-            {/* Desktop Links */}
-            <div className="nav-desktop-links" style={{display:"flex",gap:24,alignItems:"center"}}>
-              {[
-                {label:"Leistungen", id:"leistungen"},
-                {label:"Über uns",   id:"ueber-uns"},
-                {label:"Prozess",    id:"prozess"},
-                {label:"FAQ",        id:"faq"},
-              ].map(({label,id})=>(
-                <button key={id}
-                  onClick={()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});}}
-                  style={{fontSize:14,fontWeight:500,color:scrolled?"#555":"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0,transition:"color 0.2s"}}>
-                  {label}
-                </button>
-              ))}
-            </div>
-            {/* Desktop CTA */}
-            <button onClick={onFunnel} className="nav-desktop-links" style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)",minHeight:44,whiteSpace:"nowrap"}}>Analyse starten →</button>
-            {/* Mobile Hamburger — via CSS sichtbar auf Mobile */}
-            <button
-              className="nav-hamburger"
-              onClick={()=>setMenuOpen(o=>!o)}
-              style={{flexDirection:"column",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44,alignItems:"center",justifyContent:"center"}}
-            >
-              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",transform:menuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
-              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",opacity:menuOpen?0:1}}/>
-              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",transform:menuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+          {/* DESKTOP RECHTS */}
+          <div className="nav-desktop-links" style={{display:"flex",gap:24,alignItems:"center"}}>
+            {[
+              {label:"Leistungen",id:"leistungen"},
+              {label:"Über uns",id:"ueber-uns"},
+              {label:"Prozess",id:"prozess"},
+              {label:"FAQ",id:"faq"},
+            ].map(({label,id})=>(
+              <button key={id} onClick={()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});}} style={{fontSize:14,fontWeight:500,color:scrolled?"#555":"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0}}>
+                {label}
+              </button>
+            ))}
+            <button onClick={onFunnel} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",minHeight:44}}>Analyse starten →</button>
+          </div>
+          {/* HAMBURGER — nur Mobile */}
+          <button className="nav-hamburger" onClick={()=>setMenuOpen(o=>!o)} style={{flexDirection:"column",justifyContent:"center",alignItems:"center",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44}}>
+            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(45deg) translateY(7px)":"none"}}/>
+            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",opacity:menuOpen?0:1}}/>
+            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(-45deg) translateY(-7px)":"none"}}/>
+          </button>
+        </div>
+      </nav>
+      {/* MOBILE FULLSCREEN MENU — außerhalb der Nav */}
+      {menuOpen&&(
+        <div style={{position:"fixed",inset:0,zIndex:9999,background:"#07090f",display:"flex",flexDirection:"column",padding:"88px 24px 40px",overflowY:"auto"}}>
+          {/* Menü-Links */}
+          <div style={{flex:1}}>
+            {[
+              {label:"Leistungen",id:"leistungen"},
+              {label:"Über uns",id:"ueber-uns"},
+              {label:"Prozess",id:"prozess"},
+              {label:"FAQ",id:"faq"},
+            ].map(({label,id},i)=>(
+              <button key={id}
+                onClick={()=>{setMenuOpen(false);setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},350);}}
+                style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"20px 0",fontSize:24,fontWeight:700,color:"#f8fafc",background:"none",border:"none",borderBottom:"1px solid rgba(255,255,255,0.07)",cursor:"pointer",fontFamily:"'Sora',sans-serif",textAlign:"left"}}>
+                {label}
+                <span style={{color:"#0ea5e9"}}>→</span>
+              </button>
+            ))}
+          </div>
+          {/* CTAs unten */}
+          <div style={{paddingTop:32,display:"flex",flexDirection:"column",gap:12}}>
+            <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:12,padding:"18px",fontSize:16,fontWeight:700,cursor:"pointer",minHeight:54}}>
+              Kostenlose Potenzialanalyse →
+            </button>
+            <button onClick={()=>{setMenuOpen(false);onModal();}} style={{width:"100%",background:"rgba(255,255,255,0.05)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"16px",fontSize:15,cursor:"pointer",minHeight:50}}>
+              Leistung anfragen
             </button>
           </div>
         </div>
-        {/* Mobile Menu — Fullscreen Overlay */}
-        {menuOpen&&(
-          <div style={{
-            position:"fixed",top:64,left:0,right:0,bottom:0,
-            background:"rgba(7,9,15,0.98)",
-            backdropFilter:"blur(20px)",
-            zIndex:9999,
-            display:"flex",flexDirection:"column",
-            padding:"32px 5vw 40px",
-            overflowY:"auto"
-          }}>
-            {[
-              {label:"Leistungen", id:"leistungen"},
-              {label:"Über uns",   id:"ueber-uns"},
-              {label:"Prozess",    id:"prozess"},
-              {label:"FAQ",        id:"faq"},
-            ].map(({label,id},i)=>(
-              <button key={id}
-                onClick={()=>{
-                  setMenuOpen(false);
-                  setTimeout(()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});},300);
-                }}
-                style={{
-                  display:"block",width:"100%",textAlign:"left",
-                  padding:"20px 0",fontSize:22,fontWeight:700,
-                  color:"#f8fafc",background:"none",border:"none",
-                  borderBottom:"1px solid rgba(255,255,255,0.08)",
-                  cursor:"pointer",fontFamily:"Sora,sans-serif",
-                  animation:`fadeUp 0.3s ease ${i*0.06}s both`
-                }}>
-                {label}
-                <span style={{float:"right",color:"#0ea5e9",fontSize:18}}>→</span>
-              </button>
-            ))}
-            <div style={{marginTop:"auto",paddingTop:40}}>
-              <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{
-                width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
-                color:"#fff",border:"none",borderRadius:12,
-                padding:"18px",fontSize:16,fontWeight:700,
-                cursor:"pointer",minHeight:54
-              }}>
-                Kostenlose Potenzialanalyse starten →
-              </button>
-              <button onClick={()=>{setMenuOpen(false);onModal();}} style={{
-                width:"100%",marginTop:12,background:"rgba(255,255,255,0.05)",
-                color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",
-                borderRadius:12,padding:"16px",fontSize:15,
-                cursor:"pointer",minHeight:50
-              }}>
-                Leistung anfragen
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
+      )}
 
       {/* ── HERO ── Inspired by THEFABERS structure */}
       <section style={{

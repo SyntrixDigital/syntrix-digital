@@ -1557,6 +1557,11 @@ function LandingPage({ onFunnel, onPage, onModal }) {
   const [scrolled,setScrolled]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{
+    if(menuOpen) document.body.style.overflow="hidden";
+    else document.body.style.overflow="";
+    return()=>{document.body.style.overflow="";}
+  },[menuOpen]);
+  useEffect(()=>{
     const fn=()=>setScrolled(window.scrollY>40);
     window.addEventListener("scroll",fn);
     return()=>window.removeEventListener("scroll",fn);
@@ -1606,27 +1611,58 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             </button>
           </div>
         </div>
-        {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu — Fullscreen Overlay */}
         {menuOpen&&(
-          <div style={{background:scrolled?"rgba(255,255,255,0.98)":"rgba(7,9,15,0.98)",backdropFilter:"blur(16px)",borderTop:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.08)",padding:"16px 5vw 24px"}}>
+          <div style={{
+            position:"fixed",top:64,left:0,right:0,bottom:0,
+            background:"rgba(7,9,15,0.98)",
+            backdropFilter:"blur(20px)",
+            zIndex:199,
+            display:"flex",flexDirection:"column",
+            padding:"32px 5vw 40px",
+            overflowY:"auto"
+          }}>
             {[
               {label:"Leistungen", id:"leistungen"},
               {label:"Über uns",   id:"ueber-uns"},
               {label:"Prozess",    id:"prozess"},
               {label:"FAQ",        id:"faq"},
-            ].map(({label,id})=>(
+            ].map(({label,id},i)=>(
               <button key={id}
                 onClick={()=>{
                   setMenuOpen(false);
-                  setTimeout(()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});},100);
+                  setTimeout(()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});},300);
                 }}
-                style={{display:"block",width:"100%",textAlign:"left",padding:"14px 0",fontSize:16,fontWeight:600,color:scrolled?"#0f172a":"#f8fafc",background:"none",border:"none",borderBottom:scrolled?"1px solid #f1f5f9":"1px solid rgba(255,255,255,0.06)",cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>
+                style={{
+                  display:"block",width:"100%",textAlign:"left",
+                  padding:"20px 0",fontSize:22,fontWeight:700,
+                  color:"#f8fafc",background:"none",border:"none",
+                  borderBottom:"1px solid rgba(255,255,255,0.08)",
+                  cursor:"pointer",fontFamily:"Sora,sans-serif",
+                  animation:`fadeUp 0.3s ease ${i*0.06}s both`
+                }}>
                 {label}
+                <span style={{float:"right",color:"#0ea5e9",fontSize:18}}>→</span>
               </button>
             ))}
-            <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{width:"100%",marginTop:16,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:10,padding:"14px",fontSize:15,fontWeight:700,cursor:"pointer",minHeight:50}}>
-              Kostenlose Potenzialanalyse starten →
-            </button>
+            <div style={{marginTop:"auto",paddingTop:40}}>
+              <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{
+                width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
+                color:"#fff",border:"none",borderRadius:12,
+                padding:"18px",fontSize:16,fontWeight:700,
+                cursor:"pointer",minHeight:54
+              }}>
+                Kostenlose Potenzialanalyse starten →
+              </button>
+              <button onClick={()=>{setMenuOpen(false);onModal();}} style={{
+                width:"100%",marginTop:12,background:"rgba(255,255,255,0.05)",
+                color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",
+                borderRadius:12,padding:"16px",fontSize:15,
+                cursor:"pointer",minHeight:50
+              }}>
+                Leistung anfragen
+              </button>
+            </div>
           </div>
         )}
       </nav>

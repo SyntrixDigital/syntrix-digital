@@ -39,6 +39,10 @@ const CSS = `
     .footer-grid-wrap{grid-template-columns:1fr!important;gap:24px!important;}
   }
 `;
+// Globale Mobile-Regel für Funnel Fullscreen
+const FUNNEL_GLOBAL_CSS = `
+  html, body { margin: 0; padding: 0; overflow-x: hidden; background: #07090f; }
+`;
 
 const Logo = ({ size = 32, dark = false }) => {
   const bg   = dark ? "#0f172a" : "transparent";
@@ -617,6 +621,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
     <div style={{minHeight:"100vh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflowX:"hidden",margin:0,padding:0,width:"100%"}}>
       <link href={FONT} rel="stylesheet"/>
       <style>{`
+        html,body{margin:0;padding:0;background:#07090f;}
         @media(max-width:768px){
           .trust-footer{ display: none !important; }
           .trust-footer-mobile-first{ display: flex !important; }
@@ -694,43 +699,32 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       `}</style>
 
       {/* ── HEADER ── */}
-      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,9,15,0.92)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"14px 24px"}}>
+      <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,9,15,0.97)",backdropFilter:"blur(16px)",padding:"12px 20px"}}>
         <div style={{maxWidth:620,margin:"0 auto"}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-            {/* Logo — nicht klickbar, nur als Markenzeichen */}
+          {/* Logo + % */}
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8,pointerEvents:"none",userSelect:"none"}}>
-              <Logo size={22} dark={false}/>
-              <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:14,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
+              <Logo size={20} dark={false}/>
+              <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:13,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,color:"#475569"}}>Digital</span></span>
             </div>
-            <div style={{display:"flex",alignItems:"center",gap:6}}>
-              <div style={{width:6,height:6,borderRadius:"50%",background:"#0ea5e9",animation:"pulse2 2s infinite"}}/>
-              <span style={{fontSize:11,color:"#334155",fontWeight:600,fontFamily:"Sora,sans-serif"}}>
-                {step<10?`${step+1} / ${total}`:step===10?"Fast da":"✓"}
-              </span>
-            </div>
+            <span style={{fontSize:12,color:"#0ea5e9",fontWeight:700,fontFamily:"Sora,sans-serif"}}>{pct}%</span>
           </div>
           {/* Progress Bar */}
-          <div style={{position:"relative",height:3,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden"}}>
+          <div style={{position:"relative",height:2,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden"}}>
             <div style={{
               position:"absolute",top:0,left:0,height:"100%",
               width:`${pct}%`,
-              background:"linear-gradient(90deg,#0ea5e9,#6366f1,#a78bfa)",
+              background:"linear-gradient(90deg,#0ea5e9,#6366f1)",
               borderRadius:99,
               transition:"width 0.6s cubic-bezier(0.4,0,0.2,1)",
-              boxShadow:"0 0 8px rgba(14,165,233,0.6)"
+              boxShadow:"0 0 6px rgba(14,165,233,0.5)"
             }}/>
-          </div>
-          <div style={{display:"flex",justifyContent:"space-between",marginTop:5}}>
-            <span style={{fontSize:10,color:"#1e293b",fontWeight:600,textTransform:"uppercase",letterSpacing:"0.08em"}}>
-              {step<10?"Syntrix Analyse-System™":""}
-            </span>
-            <span style={{fontSize:10,color:"#0ea5e9",fontWeight:700}}>{pct}%</span>
           </div>
         </div>
       </div>
 
       {/* ── CONTENT ── */}
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px 20px 24px",position:"relative",zIndex:1}}>
+      <div style={{flex:1,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"24px 16px 16px",position:"relative",zIndex:1}}>
         <div style={{
           maxWidth:580,width:"100%",
           opacity:vis?1:0,
@@ -743,18 +737,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
             <div>
               {/* System Badge */}
               <div style={{marginBottom:16}}>
-                <div style={{
-                  display:"inline-flex",alignItems:"center",gap:8,
-                  background:"rgba(14,165,233,0.08)",
-                  border:"1px solid rgba(14,165,233,0.18)",
-                  borderRadius:100,padding:"6px 16px",marginBottom:22
-                }}>
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                    <circle cx="5" cy="5" r="4" stroke="#0ea5e9" strokeWidth="1.2"/>
-                    <circle cx="5" cy="5" r="1.5" fill="#0ea5e9"/>
-                  </svg>
-                  <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse läuft · Schritt {step+1} von {total}</span>
-                </div>
+
                 <h2 style={{
                   fontFamily:"Sora,sans-serif",
                   fontSize:"clamp(18px,3vw,26px)",
@@ -818,7 +801,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 <div style={{
                   display:"inline-flex",alignItems:"center",gap:8,
                   background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.18)",
-                  borderRadius:100,padding:"6px 16px",marginBottom:22
+                  borderRadius:100,padding:"6px 16px",marginBottom:0
                 }}>
                   <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
                   <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse abgeschlossen · Ergebnis wird erstellt</span>

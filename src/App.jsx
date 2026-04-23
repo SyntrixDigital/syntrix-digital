@@ -577,11 +577,13 @@ function PotenzialFunnel({ onBack, onCalendly }) {
     },320);
   };
 
-  const goBack=()=>{
-    if(step===0){onBack();return;}
-    setVis(false);
-    setTimeout(()=>{setDir(-1);setStep(s=>s-1);setVis(true);},220);
-  };
+  // Browser-Zurück → Analyse komplett abbrechen → zurück zur Landingpage
+  useEffect(()=>{
+    window.history.pushState({inFunnel:true},"","");
+    const handlePop=()=>{ onBack(); };
+    window.addEventListener("popstate",handlePop);
+    return()=>window.removeEventListener("popstate",handlePop);
+  },[]);
 
   const submit=()=>{
     if(!lead.name.trim()||!lead.email.trim()) return;
@@ -612,7 +614,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const pct = step<10 ? Math.round((step+1)/total*100) : 100;
 
   return (
-    <div style={{minHeight:"100vh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
+    <div style={{height:"100dvh",maxHeight:"100dvh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
       <link href={FONT} rel="stylesheet"/>
       {/* Hintergrund-Effekte */}
       <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden"}}>
@@ -686,14 +688,11 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       <div style={{position:"sticky",top:0,zIndex:10,background:"rgba(7,9,15,0.92)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"14px 24px"}}>
         <div style={{maxWidth:620,margin:"0 auto"}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
-            <button onClick={goBack} style={{background:"none",border:"none",color:"#475569",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",gap:5,fontFamily:"DM Sans,sans-serif",padding:0}}>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 11L5 7l4-4" stroke="#475569" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              Zurück
-            </button>
-            <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:8,background:"none",border:"none",cursor:"pointer",padding:0}}>
+            {/* Logo — nicht klickbar, nur als Markenzeichen */}
+            <div style={{display:"flex",alignItems:"center",gap:8,pointerEvents:"none",userSelect:"none"}}>
               <Logo size={22} dark={false}/>
               <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:14,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
-            </button>
+            </div>
             <div style={{display:"flex",alignItems:"center",gap:6}}>
               <div style={{width:6,height:6,borderRadius:"50%",background:"#0ea5e9",animation:"pulse2 2s infinite"}}/>
               <span style={{fontSize:11,color:"#334155",fontWeight:600,fontFamily:"Sora,sans-serif"}}>
@@ -722,7 +721,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       </div>
 
       {/* ── CONTENT ── */}
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"40px 20px 100px",position:"relative",zIndex:1}}>
+      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px 20px 24px",position:"relative",zIndex:1,overflowY:"auto"}}>
         <div style={{
           maxWidth:580,width:"100%",
           opacity:vis?1:0,
@@ -734,7 +733,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           {step<10&&(
             <div>
               {/* System Badge */}
-              <div style={{marginBottom:32}}>
+              <div style={{marginBottom:16}}>
                 <div style={{
                   display:"inline-flex",alignItems:"center",gap:8,
                   background:"rgba(14,165,233,0.08)",
@@ -762,7 +761,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               </div>
 
               {/* Answer Cards */}
-              <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{display:"flex",flexDirection:"column",gap:8}}>
                 {q.opts.map((opt,i)=>(
                   <button
                     key={i}
@@ -785,7 +784,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               </div>
 
               {/* Status Bar */}
-              <div style={{marginTop:24,display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10}}>
+              <div style={{marginTop:12,display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.05)",borderRadius:10}}>
                 <div style={{width:5,height:5,borderRadius:"50%",background:"#22c55e",animation:"pulse2 2s infinite",flexShrink:0}}/>
                 <span style={{fontSize:11,color:"#334155"}}>Systematische Auswertung läuft im Hintergrund — Daten werden verarbeitet</span>
               </div>

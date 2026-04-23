@@ -27,6 +27,17 @@ const CSS = `
   .proc-card:hover{transform:translateY(-5px)!important;}
   .choice-opt{transition:all 0.2s;}
   .choice-opt:hover{border-color:#0ea5e9!important;background:rgba(14,165,233,0.06)!important;}
+  .nav-hamburger{display:none;}
+  @media(max-width:768px){
+    .nav-desktop-links{display:none!important;}
+    .nav-hamburger{display:flex!important;}
+    .hero-grid-wrap{grid-template-columns:1fr!important;gap:32px!important;}
+    .hero-canvas-wrap{display:none!important;}
+    .proc-grid-wrap{grid-template-columns:1fr!important;gap:12px!important;}
+    .sys-grid-wrap{grid-template-columns:1fr!important;gap:16px!important;}
+    .ba-grid-wrap{grid-template-columns:1fr!important;gap:12px!important;}
+    .footer-grid-wrap{grid-template-columns:1fr!important;gap:24px!important;}
+  }
 `;
 
 const Logo = ({ size = 32, dark = false }) => {
@@ -1557,7 +1568,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       <link href={FONT} rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.7)",backdropFilter:"blur(14px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
+      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:200,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.7)",backdropFilter:"blur(14px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
         <div style={{maxWidth:1140,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,padding:"0 5vw"}}>
           <button onClick={()=>window.scrollTo({top:0,behavior:"smooth"})} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
             <Logo size={28}/>
@@ -1583,11 +1594,11 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             </div>
             {/* Desktop CTA */}
             <button onClick={onFunnel} className="nav-desktop-links" style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)",minHeight:44,whiteSpace:"nowrap"}}>Analyse starten →</button>
-            {/* Mobile Hamburger */}
+            {/* Mobile Hamburger — via CSS sichtbar auf Mobile */}
             <button
               className="nav-hamburger"
               onClick={()=>setMenuOpen(o=>!o)}
-              style={{display:"none",flexDirection:"column",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44,alignItems:"center",justifyContent:"center"}}
+              style={{flexDirection:"column",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44,alignItems:"center",justifyContent:"center"}}
             >
               <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",transform:menuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
               <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",opacity:menuOpen?0:1}}/>

@@ -1544,6 +1544,7 @@ function FunnelCanvas() {
 // ── LANDING PAGE ──────────────────────────────────────────────────────────────
 function LandingPage({ onFunnel, onPage, onModal }) {
   const [scrolled,setScrolled]=useState(false);
+  const [menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{
     const fn=()=>setScrolled(window.scrollY>40);
     window.addEventListener("scroll",fn);
@@ -1564,8 +1565,39 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               Syntrix<span style={{color:scrolled?"#0ea5e9":"#38bdf8"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:scrolled?"#94a3b8":"rgba(148,163,184,0.7)"}}>Digital</span>
             </span>
           </button>
-          <div style={{display:"flex",gap:24,alignItems:"center"}}>
+          <div style={{display:"flex",gap:16,alignItems:"center"}}>
+            {/* Desktop Links */}
             <div className="nav-desktop-links" style={{display:"flex",gap:24,alignItems:"center"}}>
+              {[
+                {label:"Leistungen", id:"leistungen"},
+                {label:"Über uns",   id:"ueber-uns"},
+                {label:"Prozess",    id:"prozess"},
+                {label:"FAQ",        id:"faq"},
+              ].map(({label,id})=>(
+                <button key={id}
+                  onClick={()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});}}
+                  style={{fontSize:14,fontWeight:500,color:scrolled?"#555":"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0,transition:"color 0.2s"}}>
+                  {label}
+                </button>
+              ))}
+            </div>
+            {/* Desktop CTA */}
+            <button onClick={onFunnel} className="nav-desktop-links" style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)",minHeight:44,whiteSpace:"nowrap"}}>Analyse starten →</button>
+            {/* Mobile Hamburger */}
+            <button
+              className="nav-hamburger"
+              onClick={()=>setMenuOpen(o=>!o)}
+              style={{display:"none",flexDirection:"column",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44,alignItems:"center",justifyContent:"center"}}
+            >
+              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",transform:menuOpen?"rotate(45deg) translate(5px,5px)":"none"}}/>
+              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",opacity:menuOpen?0:1}}/>
+              <span style={{display:"block",width:22,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s",transform:menuOpen?"rotate(-45deg) translate(5px,-5px)":"none"}}/>
+            </button>
+          </div>
+        </div>
+        {/* Mobile Menu Dropdown */}
+        {menuOpen&&(
+          <div style={{background:scrolled?"rgba(255,255,255,0.98)":"rgba(7,9,15,0.98)",backdropFilter:"blur(16px)",borderTop:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.08)",padding:"16px 5vw 24px"}}>
             {[
               {label:"Leistungen", id:"leistungen"},
               {label:"Über uns",   id:"ueber-uns"},
@@ -1573,15 +1605,19 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               {label:"FAQ",        id:"faq"},
             ].map(({label,id})=>(
               <button key={id}
-                onClick={()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});}}
-                style={{fontSize:14,fontWeight:500,color:scrolled?"#555":"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0,transition:"color 0.2s"}}>
+                onClick={()=>{
+                  setMenuOpen(false);
+                  setTimeout(()=>{const el=document.getElementById(id);if(el) el.scrollIntoView({behavior:"smooth",block:"start"});},100);
+                }}
+                style={{display:"block",width:"100%",textAlign:"left",padding:"14px 0",fontSize:16,fontWeight:600,color:scrolled?"#0f172a":"#f8fafc",background:"none",border:"none",borderBottom:scrolled?"1px solid #f1f5f9":"1px solid rgba(255,255,255,0.06)",cursor:"pointer",fontFamily:"DM Sans,sans-serif"}}>
                 {label}
               </button>
             ))}
-            </div>
-            <button onClick={onFunnel} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)",minHeight:44,whiteSpace:"nowrap"}}>Analyse starten →</button>
+            <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{width:"100%",marginTop:16,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:10,padding:"14px",fontSize:15,fontWeight:700,cursor:"pointer",minHeight:50}}>
+              Kostenlose Potenzialanalyse starten →
+            </button>
           </div>
-        </div>
+        )}
       </nav>
 
       {/* ── HERO ── Inspired by THEFABERS structure */}

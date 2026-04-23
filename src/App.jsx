@@ -1573,7 +1573,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       <link href={FONT} rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:200,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.7)",backdropFilter:"blur(14px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
+      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:10000,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.7)",backdropFilter:"blur(14px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
         <div style={{maxWidth:1140,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,padding:"0 5vw"}}>
           <button onClick={()=>window.scrollTo({top:0,behavior:"smooth"})} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
             <Logo size={28}/>
@@ -1617,7 +1617,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             position:"fixed",top:64,left:0,right:0,bottom:0,
             background:"rgba(7,9,15,0.98)",
             backdropFilter:"blur(20px)",
-            zIndex:199,
+            zIndex:9999,
             display:"flex",flexDirection:"column",
             padding:"32px 5vw 40px",
             overflowY:"auto"

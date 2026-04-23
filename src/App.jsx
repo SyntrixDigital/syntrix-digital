@@ -460,7 +460,7 @@ function ProcessSection({ onFunnel, onModal }) {
         <div style={{height:2,background:"rgba(255,255,255,0.05)",borderRadius:99,marginBottom:32,overflow:"hidden"}}>
           <div style={{height:"100%",width:vis?"100%":"0%",background:"linear-gradient(90deg,#0ea5e9,#a78bfa,#10b981,#f59e0b)",transition:"width 2s ease 0.3s",borderRadius:99}}/>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1.4fr 1fr 1fr 1fr",gap:16}}>
+        <div className="proc-grid-wrap" style={{display:"grid",gridTemplateColumns:"1.4fr 1fr 1fr 1fr",gap:16}}>
           {steps.map((s,i)=>(
             <div key={i} className="proc-card" style={{background:s.featured?"rgba(14,165,233,0.07)":"rgba(255,255,255,0.025)",border:s.featured?`2px solid rgba(14,165,233,0.45)`:"1px solid rgba(255,255,255,0.07)",borderRadius:20,padding:s.featured?"28px 22px":"22px 18px",backdropFilter:"blur(10px)",position:"relative",boxShadow:s.featured?"0 0 40px rgba(14,165,233,0.15)":undefined,opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(28px)",transition:`opacity 0.6s ease ${i*0.12}s,transform 0.6s ease ${i*0.12}s`}}>
               {s.badge&&<div style={{position:"absolute",top:-12,left:18,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",borderRadius:100,padding:"3px 12px",fontSize:10,fontWeight:700,color:"#fff"}}>{s.badge}</div>}
@@ -1565,6 +1565,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             </span>
           </button>
           <div style={{display:"flex",gap:24,alignItems:"center"}}>
+            <div className="nav-desktop-links" style={{display:"flex",gap:24,alignItems:"center"}}>
             {[
               {label:"Leistungen", id:"leistungen"},
               {label:"Über uns",   id:"ueber-uns"},
@@ -1577,7 +1578,8 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                 {label}
               </button>
             ))}
-            <button onClick={onFunnel} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)"}}>Analyse starten →</button>
+            </div>
+            <button onClick={onFunnel} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:9,padding:"10px 20px",fontSize:13,fontWeight:700,cursor:"pointer",boxShadow:"0 4px 14px rgba(14,165,233,0.3)",minHeight:44,whiteSpace:"nowrap"}}>Analyse starten →</button>
           </div>
         </div>
       </nav>
@@ -1585,7 +1587,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       {/* ── HERO ── Inspired by THEFABERS structure */}
       <section style={{
         minHeight:"100vh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
-        padding:"120px 5vw 80px",
+        padding:"clamp(80px,12vw,120px) 5vw clamp(40px,8vw,80px)",
         background:"linear-gradient(160deg,#07090f 0%,#0d1220 55%,#111827 100%)",
         position:"relative",overflow:"hidden",
       }}>
@@ -1615,7 +1617,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
         </div>
 
         {/* ── ZWEISPALTIG: Links Text, Rechts floatendes Panel ── */}
-        <div style={{maxWidth:1140,width:"100%",margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 420px",gap:"60px",alignItems:"center",position:"relative",zIndex:1}}>
+        <div className="hero-grid-wrap" style={{maxWidth:1140,width:"100%",margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 420px",gap:"60px",alignItems:"center",position:"relative",zIndex:1}}>
 
           {/* LEFT */}
           <div>
@@ -1669,6 +1671,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                 cursor:"pointer",
                 boxShadow:"0 0 0 1px rgba(14,165,233,0.3),0 8px 28px rgba(14,165,233,0.3)",
                 display:"inline-flex",alignItems:"center",gap:10,
+                minHeight:52,width:"100%",maxWidth:420,justifyContent:"center",
               }}>
                 Kostenlose Potenzialanalyse starten
                 <span style={{fontSize:18,lineHeight:1}}>→</span>
@@ -1681,7 +1684,9 @@ function LandingPage({ onFunnel, onPage, onModal }) {
           </div>
 
           {/* RIGHT – 3D Rotating Funnel mit Partikel-Flow */}
-          <FunnelCanvas />
+          <div className="hero-canvas-wrap">
+            <FunnelCanvas />
+          </div>
         </div>
 
         {/* Wave unten */}
@@ -2057,7 +2062,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       {/* FOOTER */}
       <footer style={{background:"#0a0f1e",borderTop:"1px solid rgba(255,255,255,0.05)",padding:"44px 5vw 28px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
-          <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,marginBottom:32}}>
+          <div className="footer-grid-wrap" style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,marginBottom:32}}>
             {/* Links: Logo + E-Mail */}
             <div>
               <button onClick={()=>window.scrollTo({top:0,behavior:"smooth"})} style={{display:"inline-flex",alignItems:"center",gap:9,marginBottom:14,background:"none",border:"none",cursor:"pointer",padding:0}}>

@@ -614,8 +614,17 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const pct = step<10 ? Math.round((step+1)/total*100) : 100;
 
   return (
-    <div style={{height:"100dvh",maxHeight:"100dvh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflow:"hidden"}}>
+    <div style={{minHeight:"100vh",background:"#07090f",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column",position:"relative",overflowX:"hidden",margin:0,padding:0,width:"100%"}}>
       <link href={FONT} rel="stylesheet"/>
+      <style>{`
+        @media(max-width:768px){
+          .trust-footer{ display: none !important; }
+          .trust-footer-mobile-first{ display: flex !important; }
+        }
+        @media(min-width:769px){
+          .trust-footer-mobile-first{ display: none !important; }
+        }
+      `}</style>
       {/* Hintergrund-Effekte */}
       <div style={{position:"absolute",inset:0,pointerEvents:"none",overflow:"hidden"}}>
         <div style={{position:"absolute",top:"-20%",left:"-10%",width:"50vw",height:"50vw",borderRadius:"50%",background:"radial-gradient(circle,rgba(14,165,233,0.08),transparent 70%)",filter:"blur(40px)"}}/>
@@ -721,7 +730,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       </div>
 
       {/* ── CONTENT ── */}
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px 20px 24px",position:"relative",zIndex:1,overflowY:"auto"}}>
+      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",padding:"20px 20px 24px",position:"relative",zIndex:1}}>
         <div style={{
           maxWidth:580,width:"100%",
           opacity:vis?1:0,
@@ -788,6 +797,17 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 <div style={{width:5,height:5,borderRadius:"50%",background:"#22c55e",animation:"pulse2 2s infinite",flexShrink:0}}/>
                 <span style={{fontSize:11,color:"#334155"}}>Systematische Auswertung läuft im Hintergrund — Daten werden verarbeitet</span>
               </div>
+              {/* Mobile Trust — nur bei Schritt 0 */}
+              {step===0&&(
+                <div className="trust-footer-mobile-first" style={{marginTop:14,display:"none",justifyContent:"center",gap:14,flexWrap:"wrap",padding:"10px 0"}}>
+                  {[{icon:"🔒",text:"SSL"},{icon:"🇩🇪",text:"DSGVO"},{icon:"✓",text:"Kein Spam"}].map(({icon,text})=>(
+                    <div key={text} style={{display:"flex",alignItems:"center",gap:4}}>
+                      <span style={{fontSize:11}}>{icon}</span>
+                      <span style={{fontSize:10,color:"#334155",fontWeight:500}}>{text}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -974,15 +994,17 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       </div>
 
       {/* ── TRUST FOOTER ── */}
+      {/* Desktop: immer sichtbar aber nach Hauptinhalt — Mobile: nur bei Schritt 0 */}
       <div style={{
-        borderTop:"1px solid #f1f5f9",
-        padding:"16px 24px",
-        background:"rgba(250,250,250,0.97)",
-      }}>
+        borderTop:"1px solid rgba(255,255,255,0.06)",
+        padding:"14px 24px",
+        background:"rgba(7,9,15,0.95)",
+        display: step===11 ? "none" : undefined,
+      }} className="trust-footer">
         <div style={{
           maxWidth:600,margin:"0 auto",
           display:"flex",justifyContent:"center",
-          gap:24,flexWrap:"wrap"
+          gap:20,flexWrap:"wrap"
         }}>
           {[
             {icon:"🔒",text:"SSL-verschlüsselt"},
@@ -991,8 +1013,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
             {icon:"✓",text:"Kein Spam"},
           ].map(({icon,text})=>(
             <div key={text} style={{display:"flex",alignItems:"center",gap:5}}>
-              <span style={{fontSize:13}}>{icon}</span>
-              <span style={{fontSize:11,color:"#94a3b8",fontWeight:500}}>{text}</span>
+              <span style={{fontSize:12}}>{icon}</span>
+              <span style={{fontSize:11,color:"#334155",fontWeight:500}}>{text}</span>
             </div>
           ))}
         </div>

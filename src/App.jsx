@@ -1554,7 +1554,6 @@ function FunnelCanvas() {
 
 // ── LANDING PAGE ──────────────────────────────────────────────────────────────
 function LandingPage({ onFunnel, onPage, onModal }) {
-  const [scrolled,setScrolled]=useState(false);
   const [menuOpen,setMenuOpen]=useState(false);
   useEffect(()=>{
     if(menuOpen) document.body.style.overflow="hidden";
@@ -1573,13 +1572,13 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       <link href={FONT} rel="stylesheet"/>
 
       {/* NAV */}
-      <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:10000,background:scrolled?"rgba(255,255,255,0.97)":"rgba(7,9,15,0.85)",backdropFilter:"blur(16px)",borderBottom:scrolled?"1px solid #ececec":"1px solid rgba(255,255,255,0.06)",transition:"all 0.35s"}}>
+      <nav style={{position:"absolute",top:0,left:0,right:0,zIndex:10000,background:"transparent",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{maxWidth:1140,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,padding:"0 20px"}}>
           {/* LOGO */}
           <button onClick={()=>{setMenuOpen(false);window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0,zIndex:10001}}>
             <Logo size={28}/>
-            <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:18,color:scrolled?"#0f172a":"#f8fafc"}}>
-              Syntrix<span style={{color:scrolled?"#0ea5e9":"#38bdf8"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:scrolled?"#94a3b8":"rgba(148,163,184,0.7)"}}>Digital</span>
+            <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:18,color:"#f8fafc"}}>
+              Syntrix<span style={{color:"#38bdf8"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"rgba(148,163,184,0.7)"}}>Digital</span>
             </span>
           </button>
           {/* DESKTOP RECHTS */}
@@ -1590,7 +1589,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               {label:"Prozess",id:"prozess"},
               {label:"FAQ",id:"faq"},
             ].map(({label,id})=>(
-              <button key={id} onClick={()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});}} style={{fontSize:14,fontWeight:500,color:scrolled?"#555":"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0}}>
+              <button key={id} onClick={()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});}} style={{fontSize:14,fontWeight:500,color:"rgba(203,213,225,0.85)",background:"none",border:"none",cursor:"pointer",padding:0}}>
                 {label}
               </button>
             ))}
@@ -1598,9 +1597,9 @@ function LandingPage({ onFunnel, onPage, onModal }) {
           </div>
           {/* HAMBURGER — nur Mobile */}
           <button className="nav-hamburger" onClick={()=>setMenuOpen(o=>!o)} style={{flexDirection:"column",justifyContent:"center",alignItems:"center",gap:5,background:"none",border:"none",cursor:"pointer",padding:8,minHeight:44,minWidth:44}}>
-            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(45deg) translateY(7px)":"none"}}/>
-            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",opacity:menuOpen?0:1}}/>
-            <span style={{display:"block",width:24,height:2,background:scrolled?"#0f172a":"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(-45deg) translateY(-7px)":"none"}}/>
+            <span style={{display:"block",width:24,height:2,background:"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(45deg) translateY(7px)":"none"}}/>
+            <span style={{display:"block",width:24,height:2,background:"#f8fafc",borderRadius:2,transition:"all 0.3s ease",opacity:menuOpen?0:1}}/>
+            <span style={{display:"block",width:24,height:2,background:"#f8fafc",borderRadius:2,transition:"all 0.3s ease",transform:menuOpen?"rotate(-45deg) translateY(-7px)":"none"}}/>
           </button>
         </div>
       </nav>
@@ -1628,8 +1627,8 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             <button onClick={()=>{setMenuOpen(false);onFunnel();}} style={{width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:12,padding:"18px",fontSize:16,fontWeight:700,cursor:"pointer",minHeight:54}}>
               Kostenlose Potenzialanalyse →
             </button>
-            <button onClick={()=>{setMenuOpen(false);onModal();}} style={{width:"100%",background:"rgba(255,255,255,0.05)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"16px",fontSize:15,cursor:"pointer",minHeight:50}}>
-              Leistung anfragen
+            <button onClick={()=>{setMenuOpen(false);setTimeout(()=>{const el=document.getElementById("leistungen");if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},350);}} style={{width:"100%",background:"rgba(255,255,255,0.05)",color:"#94a3b8",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"16px",fontSize:15,cursor:"pointer",minHeight:50}}>
+              Leistungen ansehen
             </button>
           </div>
         </div>

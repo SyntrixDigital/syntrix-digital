@@ -1092,17 +1092,19 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",fontFamily:"DM Sans,sans-serif",overflowX:"hidden",width:"100%",boxSizing:"border-box"}}>
       <link href={FONT} rel="stylesheet"/>
       <style>{`
+        html,body{margin:0;padding:0;overflow-x:hidden;}
         @media(max-width:768px){
           .cal-layout{flex-direction:column!important;padding:0!important;}
           .cal-text{width:100%!important;position:static!important;padding:28px 20px 16px!important;box-sizing:border-box!important;}
-          .cal-widget-wrap{padding:0!important;border-radius:0!important;border:none!important;margin:0!important;width:100%!important;}
-          .calendly-inline-widget{border-radius:0!important;margin:0!important;}
+          .cal-widget-wrap{width:100vw!important;margin-left:0!important;border:none!important;border-radius:0!important;overflow:hidden!important;}
           .cal-footer-grid{grid-template-columns:1fr!important;gap:28px!important;}
+          .cal-lieber{display:none!important;}
         }
         @media(min-width:769px){
-          .cal-layout{flex-direction:row!important;align-items:flex-start!important;gap:48px!important;}
-          .cal-text{width:320px!important;flex-shrink:0!important;position:sticky!important;top:40px!important;}
-          .cal-widget-wrap{flex:1!important;border-radius:16px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,0.08)!important;max-width:420px!important;}
+          .cal-layout{flex-direction:row!important;align-items:flex-start!important;gap:60px!important;justify-content:space-between!important;}
+          .cal-text{flex:1.2!important;position:sticky!important;top:40px!important;max-width:480px!important;}
+          .cal-widget-wrap{flex:1!important;max-width:420px!important;border-radius:16px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,0.08)!important;}
+          .cal-lieber-mobile{display:none!important;}
         }
       `}</style>
 
@@ -1122,67 +1124,76 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
       </div>
 
       {/* MAIN LAYOUT */}
-      <div className="cal-layout" style={{display:"flex",padding:"40px 28px",maxWidth:1200,margin:"0 auto",width:"100%",boxSizing:"border-box",overflowX:"hidden"}}>
+      <div className="cal-layout" style={{display:"flex",padding:"48px 40px",maxWidth:1100,margin:"0 auto",width:"100%",boxSizing:"border-box"}}>
 
         {/* TEXT LINKS */}
         <div className="cal-text">
-          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:20}}>
-            <div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9"}}/>
-            <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Kostenloses Strategiegespräch</span>
-          </div>
-
           {hasAnalysis ? (<>
-            <div style={{display:"inline-block",background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"4px 14px",marginBottom:16}}>
-              <span style={{fontSize:11,color:"#22c55e",fontWeight:700}}>✓ Analyse abgeschlossen</span>
+            {/* VIA POTENZIALANALYSE */}
+            <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(34,197,94,0.08)",border:"1px solid rgba(34,197,94,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:18}}>
+              <div style={{width:5,height:5,borderRadius:"50%",background:"#22c55e"}}/>
+              <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse abgeschlossen</span>
             </div>
-            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,2.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:12,lineHeight:1.2}}>
-              {leadData.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}
+            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
+              Lass uns deine Analyse konkret umsetzen
             </h1>
-            <p style={{fontSize:14,color:"#475569",lineHeight:1.7,marginBottom:20}}>
-              Buche deinen kostenlosen 30-Minuten Termin — wir bringen deine Analyse-Ergebnisse direkt mit.
+            <p style={{fontSize:15,color:"#475569",lineHeight:1.7,marginBottom:24}}>
+              Wir zeigen dir, wie aus deinen Ergebnissen ein funktionierendes System wird.
             </p>
-            <div style={{background:"rgba(14,165,233,0.06)",border:"1px solid rgba(14,165,233,0.15)",borderRadius:12,padding:"12px 16px",marginBottom:20}}>
-              <div style={{fontSize:10,color:"#334155",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>Deine Analyse</div>
-              <div style={{fontSize:13,color:"#7dd3fc"}}>{leadData.status} · Score: {leadData.score}/100</div>
-              {leadData.problem&&<div style={{fontSize:12,color:"#475569",marginTop:4}}>{leadData.problem}</div>}
-            </div>
-            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
-              {["✓ Kostenlos","✓ 30 Minuten","✓ Analyse wird mitgebracht"].map(b=>(
-                <span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>
+            <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+              {["→ Klare nächste Schritte auf Basis deiner Analyse","→ Konkrete Umsetzung — kein allgemeines Gespräch","→ Deine Analyse wird direkt mitgebracht"].map(b=>(
+                <span key={b} style={{fontSize:13,color:"#64748b",lineHeight:1.5}}>{b}</span>
               ))}
+            </div>
+            <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"14px 16px",marginBottom:20}}>
+              <div style={{fontSize:10,color:"#334155",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>Deine Analyse</div>
+              <div style={{fontSize:13,color:"#7dd3fc",marginBottom:4}}>{leadData.status} · Score: {leadData.score}/100</div>
+              {leadData.problem&&<div style={{fontSize:12,color:"#475569"}}>{leadData.problem}</div>}
             </div>
           </>) : (<>
-            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,2.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:12,lineHeight:1.2}}>
-              Unverbindliches Erstgespräch buchen.
+            {/* VIA FOOTER / DIREKT */}
+            <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:18}}>
+              <div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9"}}/>
+              <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Strategiegespräch</span>
+            </div>
+            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
+              Ein Gespräch. Klare Richtung.
             </h1>
-            <p style={{fontSize:14,color:"#475569",lineHeight:1.7,marginBottom:20}}>
-              Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir schauen gemeinsam wo dein Marketing Potenzial hat.
+            <p style={{fontSize:15,color:"#475569",lineHeight:1.7,marginBottom:24}}>
+              Wir analysieren deine aktuelle Situation und zeigen dir, welche Maßnahmen wirklich Wirkung haben — strukturiert, ohne Umwege.
             </p>
-            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
-              {["✓ Kostenlos","✓ 30 Minuten","✓ Keine Verpflichtung"].map(b=>(
-                <span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>
+            <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+              {[
+                "→ Analyse deiner aktuellen Kundengewinnung",
+                "→ Konkrete Empfehlungen — kein Standardpitch",
+                "→ Klarheit über den nächsten sinnvollen Schritt",
+              ].map(b=>(
+                <span key={b} style={{fontSize:13,color:"#64748b",lineHeight:1.5}}>{b}</span>
               ))}
             </div>
+            <div style={{fontSize:12,color:"#334155",fontStyle:"italic"}}>
+              30 Minuten · kostenlos · keine Verpflichtung
+            </div>
           </>)}
-
-          <p style={{fontSize:12,color:"#1e3a5f"}}>
+          <p className="cal-lieber" style={{fontSize:12,color:"#1e3a5f",marginTop:24}}>
             Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
           </p>
         </div>
 
         {/* CALENDLY RECHTS */}
-        <div className="cal-widget-wrap" style={{background:"rgba(255,255,255,0.02)"}}>
+        <div className="cal-widget-wrap">
           <div className="calendly-inline-widget"
             data-url="https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9"
             style={{width:"100%",height:"580px"}}/>
         </div>
       </div>
 
-      <p style={{fontSize:12,color:"#334155",textAlign:"center",paddingBottom:32}}>
+      {/* Lieber schreiben — Mobile only */}
+      <p className="cal-lieber-mobile" style={{fontSize:12,color:"#334155",textAlign:"center",padding:"16px 20px 32px"}}>
         Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
       </p>
 
-      {/* FOOTER — identisch zur Landingpage */}
+      {/* FOOTER */}
       <footer style={{background:"#0a0f1e",borderTop:"1px solid rgba(255,255,255,0.05)",padding:"44px 5vw 28px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div className="footer-grid-wrap cal-footer-grid" style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,marginBottom:32}}>

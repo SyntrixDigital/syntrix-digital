@@ -568,6 +568,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const [vis,setVis]=useState(true);
   const [dir,setDir]=useState(1);
   const [emailTouched,setEmailTouched]=useState(false);
+  const [claudeAnalysis,setClaudeAnalysis]=useState(null);
+  const [claudeLoading,setClaudeLoading]=useState(false);
   const isEmailValid=(v)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const total=10,q=QS[step];
 
@@ -608,6 +610,36 @@ function PotenzialFunnel({ onBack, onCalendly }) {
         }))
       })
     }).catch(()=>{});
+
+    // Claude API direkt im Browser aufrufen
+    setClaudeLoading(true);
+    const antworten = QS.map(q=>({frage:q.text,antwort:ans[q.id]||"–"}));
+    fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        messages:[{
+          content:"Du bist das Syntrix Analyse-System. Erstelle eine praezise Analyse.\n"+
+            "Name: "+lead.name+"\nScore: "+r.score+"/100\nStatus: "+r.status+"\n"+
+            "Problem: "+r.problem+"\nPotenzial: "+r.opportunity+"\n\nAntworten:\n"+
+            antworten.map(function(a,i){return (i+1)+". "+a.frage+"\nAntwort: "+a.antwort;}).join("\n")+
+            "\n\nAntworte NUR mit gueltigem JSON (kein Markdown):\n"+
+            '{"headline":"...","hauptproblem":"...","groesster_hebel":"...","sofortmassnahme":"...","potenzial_in_30_tagen":"..."}'
+        }]
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+      const text=data.content?.[0]?.text||"";
+      try{
+        const clean=text.replace(/[`]/g,"").replace(/json/g,"").trim();
+        setClaudeAnalysis(JSON.parse(clean));
+      }catch(e){setClaudeAnalysis(null);}
+      setClaudeLoading(false);
+    })
+    .catch(()=>setClaudeLoading(false));
   };
 
   const goBook=()=>{
@@ -946,16 +978,46 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 </div>
               </div>
 
-              {/* EMAIL HINWEIS */}
-              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.08),rgba(99,102,241,0.06))",border:"1px solid rgba(14,165,233,0.2)",borderRadius:14,padding:"16px 18px",marginBottom:8,display:"flex",gap:10,alignItems:"flex-start"}}>
-                <span style={{fontSize:20,flexShrink:0}}>📩</span>
-                <div>
-                  <div style={{fontFamily:"'Sora',sans-serif",fontSize:13,fontWeight:800,color:"#f1f5f9",marginBottom:4}}>Detaillierte Auswertung ist auf dem Weg</div>
-                  <p style={{fontSize:11,color:"#475569",lineHeight:1.6,marginBottom:6}}>Du erhältst eine tiefere Analyse per E-Mail — mit konkreten Strategien und Handlungsempfehlungen.</p>
-                  <div style={{display:"inline-flex",alignItems:"center",gap:5}}>
-                    <span style={{fontSize:10}}>⏱</span>
-                    <span style={{fontSize:10,color:"#0369a1",fontWeight:600}}>ca. 2–3 Minuten</span>
+              {/* CLAUDE ANALYSE — Live im Browser */}
+              <div style={{marginBottom:10}}>
+                {claudeLoading&&(
+                  <div style={{background:"rgba(14,165,233,0.06)",border:"1px solid rgba(14,165,233,0.15)",borderRadius:14,padding:"18px",textAlign:"center"}}>
+                    <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:10,marginBottom:8}}>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:"#0ea5e9",animation:"pulse2 1s infinite"}}/>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:"#6366f1",animation:"pulse2 1s 0.2s infinite"}}/>
+                      <div style={{width:8,height:8,borderRadius:"50%",background:"#a78bfa",animation:"pulse2 1s 0.4s infinite"}}/>
+                    </div>
+                    <p style={{fontSize:12,color:"#475569",fontWeight:600}}>Syntrix Analyse-System™ wertet deine Daten aus...</p>
+                    <p style={{fontSize:10,color:"#334155",marginTop:4}}>Individuelle KI-Analyse wird erstellt</p>
                   </div>
+                )}
+                {claudeAnalysis&&!claudeLoading&&(
+                  <div style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,padding:"16px",animation:"fadeSlideUp 0.5s ease both"}}>
+                    <div style={{fontSize:9,fontWeight:700,color:"#0ea5e9",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>KI-Analyse · Syntrix Analyse-System™</div>
+                    <div style={{fontFamily:"'Sora',sans-serif",fontSize:14,fontWeight:800,color:"#f1f5f9",marginBottom:12,lineHeight:1.3}}>{claudeAnalysis.headline}</div>
+                    <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                      {[
+                        {label:"Hauptproblem",value:claudeAnalysis.hauptproblem,color:"#ef4444"},
+                        {label:"Größter Hebel",value:claudeAnalysis.groesster_hebel,color:"#0ea5e9"},
+                        {label:"Sofortmaßnahme",value:claudeAnalysis.sofortmassnahme,color:"#22c55e"},
+                        {label:"Potenzial in 30 Tagen",value:claudeAnalysis.potenzial_in_30_tagen,color:"#a78bfa"},
+                      ].map(({label,value,color})=>(
+                        <div key={label} style={{borderLeft:`2px solid ${color}`,paddingLeft:10}}>
+                          <div style={{fontSize:9,fontWeight:700,color,letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:2}}>{label}</div>
+                          <div style={{fontSize:12,color:"#94a3b8",lineHeight:1.5}}>{value}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* EMAIL HINWEIS */}
+              <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.06),rgba(99,102,241,0.04))",border:"1px solid rgba(14,165,233,0.15)",borderRadius:14,padding:"12px 16px",marginBottom:8,display:"flex",gap:10,alignItems:"center"}}>
+                <span style={{fontSize:18,flexShrink:0}}>📩</span>
+                <div>
+                  <div style={{fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700,color:"#f1f5f9",marginBottom:2}}>Diese Auswertung geht auch an deine E-Mail</div>
+                  <p style={{fontSize:11,color:"#475569",lineHeight:1.5}}>Mit konkreten Strategien und nächsten Schritten.</p>
                 </div>
               </div>
 

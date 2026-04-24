@@ -2522,6 +2522,7 @@ export default function App() {
     } else if(p === "calendly") {
       window.history.pushState({page:"calendly"}, "", "/calendly");
       window.scrollTo(0,0);
+      setLead(null); // Footer-Weg → keine Analyse-Daten
       setPage("calendly");
     } else {
       window.history.pushState({page:"home"}, "", "/");

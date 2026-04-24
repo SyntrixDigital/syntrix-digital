@@ -956,25 +956,35 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 </div>
               </div>
 
-              {/* PROBLEM + POTENZIAL */}
+              {/* ENGPÄSSE + POTENZIAL — dynamisch von Claude */}
               <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:8}}>
-                <div style={{background:"rgba(239,68,68,0.05)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:14,padding:"10px 12px"}}>
-                  <div style={{fontSize:9,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>Handlungsfelder</div>
-                  {["Kein system. Funnel","Wenig Automatisierung","Unplanbare Leads"].map(p=>(
-                    <div key={p} style={{display:"flex",gap:6,marginBottom:4}}>
-                      <span style={{color:"#ef4444",fontSize:10,flexShrink:0,marginTop:1}}>✗</span>
-                      <span style={{fontSize:11,color:"#64748b",lineHeight:1.4}}>{p}</span>
-                    </div>
-                  ))}
+                <div style={{background:"rgba(239,68,68,0.05)",border:"1px solid rgba(239,68,68,0.12)",borderRadius:14,padding:"12px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#ef4444",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Deine größten Engpässe</div>
+                  {claudeAnalysis?.engpaesse?(
+                    <p style={{fontSize:11,color:"#64748b",lineHeight:1.6,margin:0}}>{claudeAnalysis.engpaesse}</p>
+                  ):(
+                    <p style={{fontSize:11,color:"#64748b",lineHeight:1.6,margin:0}}>
+                      {result.score<40
+                        ?"Das Marketing läuft aktuell ohne klare Struktur. Anfragen entstehen zufällig und lassen sich nicht gezielt steuern. Gleichzeitig fehlt ein automatisierter Prozess, der Interessenten systematisch in Kunden verwandelt."
+                        :result.score<70
+                        ?"Einzelne Maßnahmen sind vorhanden, greifen aber nicht ineinander. Der Funnel hat Lücken, die dazu führen, dass potenzielle Kunden verloren gehen. Ohne Automatisierung bleibt der Aufwand hoch und das Ergebnis unbeständig."
+                        :"Die Basis ist solide, aber das System läuft noch nicht auf vollem Niveau. Skalierungspotenzial bleibt ungenutzt, weil Prozesse noch nicht vollständig automatisiert sind und die Conversion-Strecke Optimierungsbedarf hat."}
+                    </p>
+                  )}
                 </div>
-                <div style={{background:"rgba(34,197,94,0.05)",border:"1px solid rgba(34,197,94,0.15)",borderRadius:14,padding:"14px"}}>
-                  <div style={{fontSize:9,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>Dein Potenzial</div>
-                  {["Planbare Anfragen","Conversion steigern","Zeit sparen"].map(p=>(
-                    <div key={p} style={{display:"flex",gap:6,marginBottom:5}}>
-                      <span style={{color:"#22c55e",fontSize:10,flexShrink:0,marginTop:1}}>→</span>
-                      <span style={{fontSize:11,color:"#64748b",lineHeight:1.4}}>{p}</span>
-                    </div>
-                  ))}
+                <div style={{background:"rgba(34,197,94,0.05)",border:"1px solid rgba(34,197,94,0.12)",borderRadius:14,padding:"12px"}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:8}}>Dein realistisches Potenzial</div>
+                  {claudeAnalysis?.realistisches_potenzial?(
+                    <p style={{fontSize:11,color:"#64748b",lineHeight:1.6,margin:0}}>{claudeAnalysis.realistisches_potenzial}</p>
+                  ):(
+                    <p style={{fontSize:11,color:"#64748b",lineHeight:1.6,margin:0}}>
+                      {result.score<40
+                        ?"Mit einem klaren System lassen sich innerhalb von 30 bis 60 Tagen erste planbare Anfragen generieren. Die Grundlage dafür ist ein strukturierter Funnel, der Interessenten automatisiert qualifiziert und weiterleitet."
+                        :result.score<70
+                        ?"Durch gezielte Optimierung der bestehenden Prozesse und den Einsatz von Automatisierung lässt sich die Anfragequantität und -qualität deutlich steigern. Das Fundament ist vorhanden — es geht jetzt darum, es konsequent auszubauen."
+                        :"Das System hat das Potenzial zur Skalierung. Mit den richtigen Stellschrauben bei Automatisierung und Conversion lassen sich Kapazitäten freisetzen und das Wachstum beschleunigen, ohne den Aufwand proportional zu erhöhen."}
+                    </p>
+                  )}
                 </div>
               </div>
 

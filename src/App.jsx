@@ -2440,10 +2440,13 @@ export default function App() {
       window.history.pushState({page:p}, "", "/"+p);
       window.scrollTo(0,0);
       setPage(p);
+    } else if(p === "calendly") {
+      window.history.pushState({page:"calendly"}, "", "/calendly");
+      window.scrollTo(0,0);
+      setPage("calendly");
     } else {
       window.history.pushState({page:"home"}, "", "/");
       setPage("home");
-      // Kein manuelles Scrollen — Browser macht es selbst
     }
   };
 

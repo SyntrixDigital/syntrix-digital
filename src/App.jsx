@@ -1089,20 +1089,20 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
     return()=>{try{document.body.removeChild(s);}catch(e){}};
   },[]);
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",fontFamily:"DM Sans,sans-serif",overflowX:"hidden"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",fontFamily:"DM Sans,sans-serif",overflowX:"hidden",width:"100%",boxSizing:"border-box"}}>
       <link href={FONT} rel="stylesheet"/>
       <style>{`
         @media(max-width:768px){
-          .cal-layout{flex-direction:column!important;}
-          .cal-text{width:100%!important;position:static!important;padding:28px 20px 20px!important;}
-          .cal-widget-wrap{padding:0!important;border-radius:0!important;border-left:none!important;border-right:none!important;}
-          .calendly-inline-widget{border-radius:0!important;}
+          .cal-layout{flex-direction:column!important;padding:0!important;}
+          .cal-text{width:100%!important;position:static!important;padding:28px 20px 16px!important;box-sizing:border-box!important;}
+          .cal-widget-wrap{padding:0!important;border-radius:0!important;border:none!important;margin:0!important;width:100%!important;}
+          .calendly-inline-widget{border-radius:0!important;margin:0!important;}
           .cal-footer-grid{grid-template-columns:1fr!important;gap:28px!important;}
         }
         @media(min-width:769px){
           .cal-layout{flex-direction:row!important;align-items:flex-start!important;gap:48px!important;}
           .cal-text{width:320px!important;flex-shrink:0!important;position:sticky!important;top:40px!important;}
-          .cal-widget-wrap{flex:1!important;border-radius:16px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,0.08)!important;}
+          .cal-widget-wrap{flex:1!important;border-radius:16px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,0.08)!important;max-width:420px!important;}
         }
       `}</style>
 
@@ -1122,7 +1122,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
       </div>
 
       {/* MAIN LAYOUT */}
-      <div className="cal-layout" style={{display:"flex",padding:"40px 28px",maxWidth:1200,margin:"0 auto",width:"100%",boxSizing:"border-box"}}>
+      <div className="cal-layout" style={{display:"flex",padding:"40px 28px",maxWidth:1200,margin:"0 auto",width:"100%",boxSizing:"border-box",overflowX:"hidden"}}>
 
         {/* TEXT LINKS */}
         <div className="cal-text">

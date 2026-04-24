@@ -1081,6 +1081,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
 
 // ── CALENDLY ──────────────────────────────────────────────────────────────────
 function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
+  const hasAnalysis = leadData?.score;
   useEffect(()=>{
     const s=document.createElement("script");
     s.src="https://assets.calendly.com/assets/external/widget.js";
@@ -1091,17 +1092,16 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
     <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",fontFamily:"DM Sans,sans-serif",overflowX:"hidden"}}>
       <link href={FONT} rel="stylesheet"/>
       <style>{`
-        .cal-wrap{display:flex;flex-direction:column;align-items:center;padding:40px 20px 0;}
-        .cal-text-block{width:100%;max-width:680px;text-align:center;margin-bottom:32px;}
-        .cal-widget-outer{width:100%;max-width:680px;margin:0 auto;}
         @media(max-width:768px){
-          .cal-wrap{padding:28px 0 0;}
-          .cal-text-block{padding:0 20px 0;}
-          .cal-widget-outer{border-radius:0;overflow:hidden;}
+          .cal-layout{flex-direction:column!important;}
+          .cal-text{width:100%!important;position:static!important;padding:28px 20px 20px!important;}
+          .cal-widget-wrap{padding:0!important;border-radius:0!important;border-left:none!important;border-right:none!important;}
           .calendly-inline-widget{border-radius:0!important;}
         }
         @media(min-width:769px){
-          .cal-widget-outer{border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);}
+          .cal-layout{flex-direction:row!important;align-items:flex-start!important;gap:48px!important;}
+          .cal-text{width:320px!important;flex-shrink:0!important;position:sticky!important;top:40px!important;}
+          .cal-widget-wrap{flex:1!important;border-radius:16px!important;overflow:hidden!important;border:1px solid rgba(255,255,255,0.08)!important;}
         }
       `}</style>
 
@@ -1113,46 +1113,73 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
             Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span>
           </span>
         </button>
-        {leadData?.score&&(
+        {hasAnalysis&&(
           <div style={{background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"4px 12px"}}>
             <span style={{fontSize:11,color:"#22c55e",fontWeight:700}}>Score: {leadData.score}/100</span>
           </div>
         )}
       </div>
 
-      {/* CONTENT */}
-      <div className="cal-wrap">
+      {/* MAIN LAYOUT */}
+      <div className="cal-layout" style={{display:"flex",padding:"40px 28px",maxWidth:1200,margin:"0 auto",width:"100%",boxSizing:"border-box"}}>
 
-        {/* TEXT */}
-        <div className="cal-text-block">
-          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:18}}>
+        {/* TEXT LINKS */}
+        <div className="cal-text">
+          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:20}}>
             <div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9"}}/>
-            <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Kostenloses Strategiegespräch · 30 Min</span>
+            <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Kostenloses Strategiegespräch</span>
           </div>
-          <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,3vw,30px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:12,lineHeight:1.2}}>
-            Lass uns deine Analyse konkret umsetzen
-          </h1>
-          <p style={{fontSize:14,color:"#475569",lineHeight:1.7,maxWidth:500,margin:"0 auto 20px"}}>
-            Wir zeigen dir, wie aus deinen Ergebnissen ein funktionierendes System wird.
+
+          {hasAnalysis ? (<>
+            <div style={{display:"inline-block",background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"4px 14px",marginBottom:16}}>
+              <span style={{fontSize:11,color:"#22c55e",fontWeight:700}}>✓ Analyse abgeschlossen</span>
+            </div>
+            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,2.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:12,lineHeight:1.2}}>
+              {leadData.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}
+            </h1>
+            <p style={{fontSize:14,color:"#475569",lineHeight:1.7,marginBottom:20}}>
+              Buche deinen kostenlosen 30-Minuten Termin — wir bringen deine Analyse-Ergebnisse direkt mit.
+            </p>
+            <div style={{background:"rgba(14,165,233,0.06)",border:"1px solid rgba(14,165,233,0.15)",borderRadius:12,padding:"12px 16px",marginBottom:20}}>
+              <div style={{fontSize:10,color:"#334155",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:4}}>Deine Analyse</div>
+              <div style={{fontSize:13,color:"#7dd3fc"}}>{leadData.status} · Score: {leadData.score}/100</div>
+              {leadData.problem&&<div style={{fontSize:12,color:"#475569",marginTop:4}}>{leadData.problem}</div>}
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
+              {["✓ Kostenlos","✓ 30 Minuten","✓ Analyse wird mitgebracht"].map(b=>(
+                <span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>
+              ))}
+            </div>
+          </>) : (<>
+            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,2.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:12,lineHeight:1.2}}>
+              Unverbindliches Erstgespräch buchen.
+            </h1>
+            <p style={{fontSize:14,color:"#475569",lineHeight:1.7,marginBottom:20}}>
+              Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir schauen gemeinsam wo dein Marketing Potenzial hat.
+            </p>
+            <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
+              {["✓ Kostenlos","✓ 30 Minuten","✓ Keine Verpflichtung"].map(b=>(
+                <span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>
+              ))}
+            </div>
+          </>)}
+
+          <p style={{fontSize:12,color:"#1e3a5f"}}>
+            Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
           </p>
-          <div style={{display:"flex",justifyContent:"center",gap:20,flexWrap:"wrap"}}>
-            {["✓ Kostenlos","✓ Keine Verpflichtung",leadData?.score?"✓ Analyse wird mitgebracht":"✓ 30 Minuten"].map(b=>(
-              <span key={b} style={{fontSize:12,color:"#334155",fontWeight:600}}>{b}</span>
-            ))}
-          </div>
         </div>
 
-        {/* CALENDLY */}
-        <div className="cal-widget-outer">
+        {/* CALENDLY RECHTS */}
+        <div className="cal-widget-wrap" style={{background:"rgba(255,255,255,0.02)"}}>
           <div className="calendly-inline-widget"
             data-url="https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9"
-            style={{width:"100%",height:"700px",background:"#fff"}}/>
+            style={{width:"100%",height:"700px"}}/>
         </div>
-
-        <p style={{fontSize:12,color:"#334155",margin:"20px 0 40px",textAlign:"center"}}>
-          Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
-        </p>
       </div>
+
+      <p style={{fontSize:12,color:"#334155",textAlign:"center",paddingBottom:32}}>
+        Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
+      </p>
 
       {/* FOOTER — identisch zur Landingpage */}
       <footer style={{background:"#0a0f1e",borderTop:"1px solid rgba(255,255,255,0.05)",padding:"44px 5vw 28px"}}>

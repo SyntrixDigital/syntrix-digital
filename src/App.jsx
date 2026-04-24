@@ -325,12 +325,24 @@ function BeforeAfter() {
   ];
   return (
     <section style={{padding:"80px 5vw 0",background:"#fff"}}>
+      <style>{`
+        @media(max-width:768px){
+          .ba-desktop{display:none!important;}
+          .ba-mobile{display:flex!important;}
+        }
+        @media(min-width:769px){
+          .ba-desktop{display:block!important;}
+          .ba-mobile{display:none!important;}
+        }
+      `}</style>
       <div style={{maxWidth:1080,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:44}}>
           <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#6366f1",textTransform:"uppercase"}}>Vorher · Nachher</span>
           <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,40px)",fontWeight:800,color:"#0f172a",letterSpacing:"-0.025em",marginTop:12}}>Der Weg aus dem Marketing-Chaos</h2>
         </div>
-        <div style={{borderRadius:16,overflow:"hidden",border:"1px solid #f0f0f0",boxShadow:"0 4px 20px rgba(0,0,0,0.05)"}}>
+
+        {/* DESKTOP — original 3-spaltig */}
+        <div className="ba-desktop" style={{borderRadius:16,overflow:"hidden",border:"1px solid #f0f0f0",boxShadow:"0 4px 20px rgba(0,0,0,0.05)"}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 44px 1fr"}}>
             <div style={{background:"#fef2f2",padding:"13px 20px",textAlign:"center"}}><span style={{fontSize:11,fontWeight:700,color:"#dc2626",letterSpacing:"0.08em"}}>✗ OHNE SYSTEM</span></div>
             <div style={{background:"#f8fafc"}}/>
@@ -352,6 +364,31 @@ function BeforeAfter() {
             </div>
           ))}
         </div>
+
+        {/* MOBILE — kompakt, untereinander, kein Pfeil */}
+        <div className="ba-mobile" style={{flexDirection:"column",gap:10,display:"none"}}>
+          {rows.map((r,i)=>(
+            <div key={i} style={{borderRadius:14,overflow:"hidden",border:"1px solid #f0f0f0"}}>
+              {/* Ohne System */}
+              <div style={{background:"#fff9f9",padding:"14px 16px",display:"flex",alignItems:"flex-start",gap:10,borderBottom:"1px solid #f5f5f5"}}>
+                <div style={{width:28,height:28,borderRadius:8,background:"#fee2e2",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>{r.icon}</div>
+                <div>
+                  <div style={{fontSize:9,fontWeight:700,color:"#dc2626",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:3}}>✗ Ohne System</div>
+                  <span style={{fontSize:13,color:"#7f1d1d",lineHeight:1.5}}>{r.p}</span>
+                </div>
+              </div>
+              {/* Mit Syntrix */}
+              <div style={{background:"#f0fdf4",padding:"14px 16px",display:"flex",alignItems:"flex-start",gap:10}}>
+                <div style={{width:28,height:28,borderRadius:8,background:"#dcfce7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,flexShrink:0}}>✓</div>
+                <div>
+                  <div style={{fontSize:9,fontWeight:700,color:"#16a34a",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:3}}>✓ Mit Syntrix</div>
+                  <span style={{fontSize:13,color:"#14532d",lineHeight:1.5,fontWeight:500}}>{r.s}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

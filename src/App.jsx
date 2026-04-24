@@ -1082,48 +1082,126 @@ function PotenzialFunnel({ onBack, onCalendly }) {
 // ── CALENDLY ──────────────────────────────────────────────────────────────────
 function CalendlyPage({ leadData, onBack }) {
   useEffect(()=>{
-    const s=document.createElement("script");s.src="https://assets.calendly.com/assets/external/widget.js";s.async=true;document.body.appendChild(s);
+    const s=document.createElement("script");
+    s.src="https://assets.calendly.com/assets/external/widget.js";
+    s.async=true;document.body.appendChild(s);
     return()=>{try{document.body.removeChild(s);}catch(e){}};
   },[]);
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",padding:"48px 20px",fontFamily:"DM Sans,sans-serif"}}>
+    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#070c18,#0f172a)",fontFamily:"DM Sans,sans-serif",display:"flex",flexDirection:"column"}}>
       <link href={FONT} rel="stylesheet"/>
-      <div style={{maxWidth:740,margin:"0 auto"}}>
-        <div style={{textAlign:"center",marginBottom:32}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18}}>
-            <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",display:"flex",alignItems:"center",gap:6,fontFamily:"DM Sans,sans-serif"}}>← Zurück</button>
-            <button onClick={onBack} style={{display:"inline-flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
-              <Logo size={32}/><span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:20,color:"#fff"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span></span>
-            </button>
-            <div style={{width:60}}/>
+      <style>{`
+        @media(max-width:768px){
+          .cal-layout{flex-direction:column!important;}
+          .cal-text{max-width:100%!important;padding:32px 20px 20px!important;}
+          .cal-widget-wrap{padding:0 0 40px!important;}
+          .cal-widget{height:600px!important;margin:0!important;border-radius:0!important;}
+        }
+        @media(min-width:769px){
+          .cal-layout{flex-direction:row!important;align-items:flex-start!important;}
+          .cal-text{width:340px!important;flex-shrink:0!important;position:sticky!important;top:40px!important;}
+          .cal-widget-wrap{flex:1!important;}
+        }
+      `}</style>
+
+      {/* HEADER */}
+      <div style={{padding:"20px 32px",borderBottom:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0}}>
+        <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
+          <Logo size={26}/>
+          <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
+        </button>
+        {leadData?.score&&(
+          <div style={{background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"4px 14px"}}>
+            <span style={{fontSize:11,color:"#22c55e",fontWeight:700}}>Score: {leadData.score}/100</span>
           </div>
-          {leadData?.score ? (
-            <>
-              <div style={{display:"inline-block",background:"rgba(34,197,94,0.12)",border:"1px solid rgba(34,197,94,0.25)",color:"#22c55e",borderRadius:100,padding:"5px 18px",fontSize:12,fontWeight:700,marginBottom:18}}>✓ Analyse abgeschlossen</div>
-              <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>
-                {leadData.name?`Fast geschafft, ${leadData.name.split(" ")[0]}!`:"Fast geschafft!"}
-              </h1>
-              <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir bringen deine Analyse-Ergebnisse direkt mit.</p>
-            </>
-          ) : (
-            <>
-              <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,38px)",fontWeight:800,color:"#fff",marginBottom:12,letterSpacing:"-0.02em"}}>Unverbindliches Erstgespräch buchen.</h1>
-              <p style={{fontSize:16,color:"#475569",maxWidth:460,margin:"0 auto",lineHeight:1.7}}>Buche deinen <strong style={{color:"#fff"}}>kostenlosen 30-Minuten Termin</strong> — wir schauen gemeinsam wo dein Marketing Potenzial hat.</p>
-            </>
-          )}
-        </div>
-        {leadData?.score&&<div style={{background:"rgba(14,165,233,0.07)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:12,padding:"12px 20px",marginBottom:24,textAlign:"center"}}><span style={{fontSize:13,color:"#7dd3fc"}}>Score: {leadData.score}/100 · {leadData.status}</span></div>}
-        <div style={{display:"flex",justifyContent:"center",gap:22,marginBottom:28,flexWrap:"wrap"}}>
-          {leadData?.score
-            ? ["✓ Kostenlos","✓ 30 Minuten","✓ Analyse wird mitgebracht"].map(b=><span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>)
-            : ["✓ Kostenlos","✓ 30 Minuten","✓ Keine Verpflichtung"].map(b=><span key={b} style={{fontSize:13,color:"#334155",fontWeight:600}}>{b}</span>)
-          }
-        </div>
-        <div style={{background:"rgba(255,255,255,0.02)",borderRadius:20,border:"1px solid rgba(255,255,255,0.08)",overflow:"hidden",minHeight:650}}>
-          <div className="calendly-inline-widget" data-url={`https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9`} style={{minWidth:320,height:700}}/>
-        </div>
-        <p style={{textAlign:"center",fontSize:12,color:"#334155",marginTop:20}}>Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a></p>
+        )}
       </div>
+
+      {/* MAIN LAYOUT */}
+      <div className="cal-layout" style={{flex:1,display:"flex",padding:"40px 32px",gap:48,maxWidth:1200,margin:"0 auto",width:"100%",boxSizing:"border-box"}}>
+
+        {/* TEXT LINKS */}
+        <div className="cal-text" style={{maxWidth:340}}>
+          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(14,165,233,0.08)",border:"1px solid rgba(14,165,233,0.18)",borderRadius:100,padding:"5px 14px",marginBottom:20}}>
+            <div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9"}}/>
+            <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Kostenloses Strategiegespräch</span>
+          </div>
+          <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,2.5vw,30px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
+            Lass uns deine Analyse konkret umsetzen
+          </h1>
+          <p style={{fontSize:14,color:"#475569",lineHeight:1.7,marginBottom:24}}>
+            Wir zeigen dir, wie aus deinen Ergebnissen ein funktionierendes System wird.
+          </p>
+          <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:28}}>
+            {[
+              {icon:"→",text:"Klare nächste Schritte auf Basis deiner Analyse"},
+              {icon:"→",text:"Konkrete Umsetzung — kein allgemeines Beratungsgespräch"},
+              {icon:"→",text:"30 Minuten · kostenlos · unverbindlich"},
+            ].map(({icon,text})=>(
+              <div key={text} style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+                <span style={{color:"#0ea5e9",fontWeight:700,flexShrink:0,marginTop:1}}>{icon}</span>
+                <span style={{fontSize:13,color:"#64748b",lineHeight:1.5}}>{text}</span>
+              </div>
+            ))}
+          </div>
+          {leadData?.score&&(
+            <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"14px 16px"}}>
+              <div style={{fontSize:10,color:"#334155",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>Deine Analyse</div>
+              <div style={{fontSize:13,color:"#94a3b8"}}>{leadData.status} · Score: {leadData.score}/100</div>
+              {leadData.problem&&<div style={{fontSize:12,color:"#475569",marginTop:4}}>{leadData.problem}</div>}
+            </div>
+          )}
+          <p style={{fontSize:12,color:"#1e3a5f",marginTop:20}}>
+            Lieber schreiben? <a href="mailto:info@syntrixdigital.de" style={{color:"#0ea5e9",textDecoration:"none"}}>info@syntrixdigital.de</a>
+          </p>
+        </div>
+
+        {/* CALENDLY RECHTS */}
+        <div className="cal-widget-wrap" style={{flex:1}}>
+          <div className="cal-widget" style={{
+            background:"rgba(255,255,255,0.02)",
+            borderRadius:16,
+            border:"1px solid rgba(255,255,255,0.07)",
+            overflow:"hidden",
+            height:700,
+            margin:"0 auto"
+          }}>
+            <div className="calendly-inline-widget"
+              data-url="https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9"
+              style={{width:"100%",height:"100%"}}/>
+          </div>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer style={{background:"#0a0f1e",borderTop:"1px solid rgba(255,255,255,0.05)",padding:"32px 5vw 24px",marginTop:"auto"}}>
+        <div className="footer-grid-wrap" style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,maxWidth:1140,margin:"0 auto 24px"}}>
+          <div>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+              <Logo size={28}/>
+              <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,color:"#334155"}}>Digital</span></span>
+            </div>
+            <p style={{fontSize:13,color:"#334155",lineHeight:1.7,maxWidth:280}}>KI-gestützte Marketing-Systeme für planbare Anfragen und skalierbares Wachstum.</p>
+          </div>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:"#334155",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:12}}>Kontakt</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              <a href="mailto:info@syntrixdigital.de" style={{display:"flex",alignItems:"center",gap:8,color:"#475569",fontSize:13,textDecoration:"none"}}>info@syntrixdigital.de</a>
+              <a href="tel:+4929213702021" style={{display:"flex",alignItems:"center",gap:8,color:"#475569",fontSize:13,textDecoration:"none"}}>+49 2921 370 20 21</a>
+            </div>
+          </div>
+          <div>
+            <div style={{fontSize:11,fontWeight:700,color:"#334155",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:12}}>Rechtliches</div>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",padding:0,textAlign:"left"}}>Impressum</button>
+              <button onClick={onBack} style={{background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",padding:0,textAlign:"left"}}>Datenschutz</button>
+            </div>
+          </div>
+        </div>
+        <div style={{borderTop:"1px solid rgba(255,255,255,0.05)",paddingTop:20,textAlign:"center"}}>
+          <span style={{fontSize:12,color:"#1e3a5f"}}></span>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -2211,7 +2289,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             {/* Mitte: Anfragen */}
             <div>
               <div style={{fontSize:10,fontWeight:700,letterSpacing:"0.1em",color:"#1e3a5f",marginBottom:13,textTransform:"uppercase"}}>Anfragen</div>
-              <button onClick={()=>onPage("calendly")} style={{display:"block",background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",padding:0,marginBottom:9,textAlign:"left"}}>📅 Strategiegespräch</button>
+              <button onClick={()=>onPage("calendly")} style={{display:"block",background:"none",border:"none",color:"#475569",fontSize:13,cursor:"pointer",padding:0,marginBottom:9,textAlign:"left"}}>📅 Strategiegespräch buchen</button>
               <a href="mailto:info@syntrixdigital.de" style={{display:"block",color:"#475569",fontSize:13,textDecoration:"none",marginBottom:9}}>✉ E-Mail schreiben</a>
               <button onClick={onFunnel} style={{display:"block",background:"none",border:"none",color:"#0ea5e9",fontSize:13,cursor:"pointer",padding:0,fontWeight:600,textAlign:"left"}}>⚡ Analyse starten →</button>
             </div>

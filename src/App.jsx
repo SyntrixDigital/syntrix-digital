@@ -570,6 +570,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const [emailTouched,setEmailTouched]=useState(false);
   const [claudeAnalysis,setClaudeAnalysis]=useState(null);
   const [claudeLoading,setClaudeLoading]=useState(false);
+  const [loadingPhase,setLoadingPhase]=useState(0);
+  const [showResult,setShowResult]=useState(false);
   const isEmailValid=(v)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const total=10,q=QS[step];
 
@@ -593,7 +595,18 @@ function PotenzialFunnel({ onBack, onCalendly }) {
 
   const submit=()=>{
     if(!lead.name.trim()||!lead.email.trim()) return;
-    const r=calcResult(ans);setResult(r);setStep(11);
+    const r=calcResult(ans);setResult(r);
+    // Loading Phase starten
+    setLoadingPhase(0);
+    setShowResult(false);
+    setStep(11);
+    // Phasen nacheinander wechseln
+    const phases=[0,1,2,3,4];
+    phases.forEach((p,i)=>{
+      setTimeout(()=>setLoadingPhase(p),i*1100);
+    });
+    // Nach 5.5 Sek Ergebnis einblenden
+    setTimeout(()=>setShowResult(true),5500);
     // Webhook sofort nach Auswertung senden — alle 10 Antworten
     fetch("https://hook.eu1.make.com/czp5fuht1b3uwx1o3dk7bf65juot5qt2",{
       method:"POST",mode:"no-cors",
@@ -902,6 +915,39 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           {step===11&&result&&(
             <div style={{animation:"fadeSlideUp 0.6s ease both",paddingBottom:8}}>
 
+              {/* ── LOADING PHASE ── */}
+              {!showResult&&(
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"60vh",gap:24,padding:"0 16px"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4,pointerEvents:"none"}}>
+                    <Logo size={26}/>
+                    <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:15,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,color:"#475569"}}>Digital</span></span>
+                  </div>
+                  <div style={{width:"100%",maxWidth:300}}>
+                    <div style={{height:2,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden",marginBottom:20}}>
+                      <div style={{height:"100%",width:((loadingPhase+1)/5*100)+"%",background:"linear-gradient(90deg,#0ea5e9,#6366f1)",borderRadius:99,transition:"width 1s ease"}}/>
+                    </div>
+                    {["Daten werden strukturiert…","Vergleich mit Referenzwerten…","Potenziale werden berechnet…","Individuelle Auswertung wird erstellt…","Analyse abgeschlossen ✓"].map((txt,i)=>(
+                      <div key={i} style={{
+                        textAlign:"center",fontSize:13,marginBottom:8,
+                        display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+                        fontWeight:loadingPhase===i?600:400,
+                        color:loadingPhase>i?"#22c55e":loadingPhase===i?"#f8fafc":"#1e3a5f",
+                        transition:"color 0.4s ease"
+                      }}>
+                        {loadingPhase>i&&<span style={{fontSize:10}}>✓</span>}
+                        {loadingPhase===i&&<div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9",animation:"pulse2 1s infinite",flexShrink:0}}/>}
+                        {loadingPhase<i&&<div style={{width:5,height:5,flexShrink:0}}/>}
+                        {txt}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── ERGEBNIS INHALT (nach Loading) ── */}
+              {showResult&&(
+              <div style={{animation:"fadeSlideUp 0.7s ease both"}}>
+
               {/* HEADER */}
               <div style={{textAlign:"center",marginBottom:20}}>
                 <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"rgba(34,197,94,0.1)",border:"1px solid rgba(34,197,94,0.2)",borderRadius:100,padding:"5px 14px",marginBottom:12}}>
@@ -1042,6 +1088,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 Kostenloses Erstgespräch buchen →
               </button>
               <p style={{fontSize:11,color:"#334155",textAlign:"center"}}>Lass uns deine Analyse gemeinsam durchgehen.</p>
+              </div>)} {/* end showResult */}
             </div>
           )}
 

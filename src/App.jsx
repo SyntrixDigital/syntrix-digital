@@ -1097,6 +1097,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
           .cal-text{width:100%!important;position:static!important;padding:28px 20px 20px!important;}
           .cal-widget-wrap{padding:0!important;border-radius:0!important;border-left:none!important;border-right:none!important;}
           .calendly-inline-widget{border-radius:0!important;}
+          .cal-footer-grid{grid-template-columns:1fr!important;gap:28px!important;}
         }
         @media(min-width:769px){
           .cal-layout{flex-direction:row!important;align-items:flex-start!important;gap:48px!important;}
@@ -1173,7 +1174,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
         <div className="cal-widget-wrap" style={{background:"rgba(255,255,255,0.02)"}}>
           <div className="calendly-inline-widget"
             data-url="https://calendly.com/kontakt-syntrixdigital/30min?hide_gdpr_banner=1&primary_color=0ea5e9"
-            style={{width:"100%",height:"700px"}}/>
+            style={{width:"100%",height:"580px"}}/>
         </div>
       </div>
 
@@ -1184,7 +1185,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
       {/* FOOTER — identisch zur Landingpage */}
       <footer style={{background:"#0a0f1e",borderTop:"1px solid rgba(255,255,255,0.05)",padding:"44px 5vw 28px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
-          <div className="footer-grid-wrap" style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,marginBottom:32}}>
+          <div className="footer-grid-wrap cal-footer-grid" style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr",gap:32,marginBottom:32}}>
             <div>
               <button onClick={onBack} style={{display:"inline-flex",alignItems:"center",gap:9,marginBottom:14,background:"none",border:"none",cursor:"pointer",padding:0}}>
                 <Logo size={26}/>

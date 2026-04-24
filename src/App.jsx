@@ -28,6 +28,15 @@ const CSS = `
   .choice-opt{transition:all 0.2s;}
   .choice-opt:hover{border-color:#0ea5e9!important;background:rgba(14,165,233,0.06)!important;}
   .nav-hamburger{display:none;}
+  .sys-desktop{display:block;}
+  .sys-mobile{display:none;}
+  @media(max-width:768px){
+    .sys-desktop{display:none!important;}
+    .sys-mobile{display:block!important;}
+    .swipe-cards{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding:0 20px 16px;}
+    .swipe-cards::-webkit-scrollbar{display:none;}
+    .swipe-card{min-width:82%;scroll-snap-align:center;flex-shrink:0;}
+  }
   @media(max-width:768px){
     .nav-desktop-links{display:none!important;}
     .nav-hamburger{display:flex!important;}
@@ -55,7 +64,7 @@ const Logo = ({ size = 32, dark = false }) => {
   const sc   = s / 64;
   const p    = (v) => v * sc;
   return (
-    <svg width={s} height={s} viewBox={`0 0 ${s} ${s}`} fill="none">
+    <svg width={s} height={s} viewBox={"0 0 "+s+" "+s} fill="none">
       {dark && <rect width={s} height={s} rx={p(14)} fill="#0f172a"/>}
       {/* diagonal faint helpers */}
       <line x1={p(8)}  y1={p(8)}  x2={p(56)} y2={p(56)} stroke={node} strokeWidth={p(0.5)} opacity="0.18"/>
@@ -219,7 +228,7 @@ function ServiceModal({ onClose, onFunnel }) {
         {sent ? (
           <div style={{padding:"56px 40px",textAlign:"center"}}>
             <div style={{fontSize:44,marginBottom:16}}>🎉</div>
-            <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:22,fontWeight:800,color:"#0f172a",marginBottom:10}}>Anfrage gesendet</h3>
+            <h3 style={{fontFamily:"Sora,sans-serif",fontSize:22,fontWeight:800,color:"#0f172a",marginBottom:10}}>Anfrage gesendet</h3>
             <p style={{fontSize:14,color:"#64748b",lineHeight:1.7,marginBottom:28}}>Wir melden uns innerhalb von 24 Stunden mit einem individuellen Angebot.</p>
             <button onClick={()=>{onClose();onFunnel();}} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:10,padding:"12px 26px",fontSize:14,fontWeight:700,cursor:"pointer",marginRight:10}}>Termin buchen →</button>
             <button onClick={onClose} style={{background:"#f1f5f9",color:"#64748b",border:"none",borderRadius:10,padding:"12px 20px",fontSize:14,cursor:"pointer"}}>Schließen</button>
@@ -228,14 +237,14 @@ function ServiceModal({ onClose, onFunnel }) {
           <div style={{padding:"32px 32px 28px"}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
               <div>
-                <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:19,fontWeight:800,color:"#0f172a",marginBottom:4}}>Leistung anfragen</h3>
+                <h3 style={{fontFamily:"Sora,sans-serif",fontSize:19,fontWeight:800,color:"#0f172a",marginBottom:4}}>Leistung anfragen</h3>
                 <p style={{fontSize:13,color:"#94a3b8"}}>⏱ ca. 60–90 Sek. · 📩 Angebot in 24 h</p>
               </div>
               <button onClick={onClose} style={{background:"#f1f5f9",border:"none",borderRadius:8,width:30,height:30,cursor:"pointer",color:"#64748b",fontSize:15}}>✕</button>
             </div>
             <div style={{marginBottom:22}}>
               <div style={{height:3,background:"#f1f5f9",borderRadius:99}}>
-                <div style={{height:"100%",width:`${step/4*100}%`,background:"linear-gradient(90deg,#0ea5e9,#6366f1)",borderRadius:99,transition:"width 0.4s"}}/>
+                <div style={{height:"100%",width:(step/4*100)+"%",background:"linear-gradient(90deg,#0ea5e9,#6366f1)",borderRadius:99,transition:"width 0.4s"}}/>
               </div>
               <div style={{display:"flex",justifyContent:"space-between",marginTop:6}}>
                 {["Leistungen","Ziel","Qualifizierung","Kontakt"].map((l,i)=><span key={i} style={{fontSize:10,fontWeight:600,color:i+1===step?"#0ea5e9":i+1<step?"#22c55e":"#cbd5e1"}}>{l}</span>)}
@@ -247,7 +256,7 @@ function ServiceModal({ onClose, onFunnel }) {
                 {SVCS.map(s=>(
                   <button key={s.id} onClick={()=>tog(s.id)} className="choice-opt" style={{textAlign:"left",padding:"12px 14px",borderRadius:10,border:d.selected_services.includes(s.id)?"1.5px solid #6366f1":"1px solid #e2e8f0",background:d.selected_services.includes(s.id)?"rgba(99,102,241,0.06)":"#fafafa",cursor:"pointer"}}>
                     <div style={{fontSize:18,marginBottom:6}}>{s.icon}</div>
-                    <div style={{fontSize:13,fontWeight:700,color:"#0f172a",fontFamily:"'Sora',sans-serif"}}>{s.title}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#0f172a",fontFamily:"Sora,sans-serif"}}>{s.title}</div>
                     {d.selected_services.includes(s.id)&&<div style={{fontSize:10,color:"#6366f1",marginTop:3,fontWeight:700}}>✓ Gewählt</div>}
                   </button>
                 ))}
@@ -319,34 +328,31 @@ function ServiceModal({ onClose, onFunnel }) {
 // ── BEFORE/AFTER ──────────────────────────────────────────────────────────────
 function BeforeAfter() {
   const rows=[
-    {icon:"📅",p:"Kein Zeit für Marketing neben dem Tagesgeschäft",s:"Marketing läuft automatisch — auch wenn du schläfst"},
+    {icon:"📅",p:"Keine Zeit für Marketing neben dem Tagesgeschäft",s:"Marketing läuft automatisch — auch wenn du schläfst"},
     {icon:"💸",p:"Agentur-Kosten für 5-stellige Monatshonorare",s:"Skalierbare Pakete ohne Personalbindung"},
     {icon:"🔀",p:"Kein Funnel — jede Maßnahme verpufft wirkungslos",s:"Strukturierter Funnel mit messbaren Ergebnissen"},
   ];
   return (
     <section style={{padding:"80px 5vw 0",background:"#fff"}}>
       <style>{`
-        @media(max-width:768px){
-          .ba-desktop{display:none!important;}
-          .ba-mobile{display:flex!important;}
-        }
-        @media(min-width:769px){
-          .ba-desktop{display:block!important;}
-          .ba-mobile{display:none!important;}
-        }
+        .ba-d{display:block}.ba-m{display:none}
+        @media(max-width:768px){.ba-d{display:none!important}.ba-m{display:block!important}}
+        .swipe-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:12px;padding:0 0 12px}
+        .swipe-row::-webkit-scrollbar{display:none}
+        .swipe-card{min-width:80%;scroll-snap-align:center;flex-shrink:0}
       `}</style>
       <div style={{maxWidth:1080,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:44}}>
           <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#6366f1",textTransform:"uppercase"}}>Vorher · Nachher</span>
-          <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,40px)",fontWeight:800,color:"#0f172a",letterSpacing:"-0.025em",marginTop:12}}>Der Weg aus dem Marketing-Chaos</h2>
+          <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(22px,4vw,40px)",fontWeight:800,color:"#0f172a",letterSpacing:"-0.025em",marginTop:12}}>Der Weg aus dem Marketing-Chaos</h2>
         </div>
 
-        {/* DESKTOP — original 3-spaltig */}
-        <div className="ba-desktop" style={{borderRadius:16,overflow:"hidden",border:"1px solid #f0f0f0",boxShadow:"0 4px 20px rgba(0,0,0,0.05)"}}>
+        {/* Desktop */}
+        <div className="ba-d" style={{borderRadius:16,overflow:"hidden",border:"1px solid #f0f0f0",boxShadow:"0 4px 20px rgba(0,0,0,0.05)"}}>
           <div style={{display:"grid",gridTemplateColumns:"1fr 44px 1fr"}}>
-            <div style={{background:"#fef2f2",padding:"13px 20px",textAlign:"center"}}><span style={{fontSize:11,fontWeight:700,color:"#dc2626",letterSpacing:"0.08em"}}>✗ OHNE SYSTEM</span></div>
+            <div style={{background:"#fef2f2",padding:"13px 20px",textAlign:"center"}}><span style={{fontSize:11,fontWeight:700,color:"#dc2626",letterSpacing:"0.08em"}}>OHNE SYSTEM</span></div>
             <div style={{background:"#f8fafc"}}/>
-            <div style={{background:"#f0fdf4",padding:"13px 20px",textAlign:"center"}}><span style={{fontSize:11,fontWeight:700,color:"#16a34a",letterSpacing:"0.08em"}}>✓ MIT SYNTRIX</span></div>
+            <div style={{background:"#f0fdf4",padding:"13px 20px",textAlign:"center"}}><span style={{fontSize:11,fontWeight:700,color:"#16a34a",letterSpacing:"0.08em"}}>MIT SYNTRIX</span></div>
           </div>
           {rows.map((r,i)=>(
             <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 44px 1fr",borderTop:"1px solid #f5f5f5"}}>
@@ -355,7 +361,7 @@ function BeforeAfter() {
                 <span style={{fontSize:13,color:"#7f1d1d",lineHeight:1.6}}>{r.p}</span>
               </div>
               <div style={{display:"flex",alignItems:"center",justifyContent:"center",background:"#f8fafc",borderLeft:"1px solid #f0f0f0",borderRight:"1px solid #f0f0f0"}}>
-                <span style={{fontSize:15,fontWeight:800,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>→</span>
+                <span style={{fontSize:15,fontWeight:800,color:"#6366f1"}}>→</span>
               </div>
               <div style={{background:i%2?"#f7fff9":"#f0fdf4",padding:"18px 20px",display:"flex",alignItems:"center",gap:12}}>
                 <div style={{width:32,height:32,borderRadius:9,background:"#dcfce7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>✓</div>
@@ -365,30 +371,30 @@ function BeforeAfter() {
           ))}
         </div>
 
-        {/* MOBILE — kompakt, untereinander, kein Pfeil */}
-        <div className="ba-mobile" style={{flexDirection:"column",gap:10,display:"none"}}>
-          {rows.map((r,i)=>(
-            <div key={i} style={{borderRadius:14,overflow:"hidden",border:"1px solid #f0f0f0"}}>
-              {/* Ohne System */}
-              <div style={{background:"#fff9f9",padding:"14px 16px",display:"flex",alignItems:"flex-start",gap:10,borderBottom:"1px solid #f5f5f5"}}>
-                <div style={{width:28,height:28,borderRadius:8,background:"#fee2e2",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>{r.icon}</div>
-                <div>
-                  <div style={{fontSize:9,fontWeight:700,color:"#dc2626",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:3}}>✗ Ohne System</div>
+        {/* Mobile Swipe */}
+        <div className="ba-m">
+          <div className="swipe-row">
+            <div className="swipe-card" style={{borderRadius:16,background:"#fff9f9",border:"1px solid #fecaca",padding:"20px"}}>
+              <div style={{fontSize:10,fontWeight:700,color:"#dc2626",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:14}}>Ohne System</div>
+              {rows.map((r,i)=>(
+                <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:12}}>
+                  <div style={{width:28,height:28,borderRadius:8,background:"#fee2e2",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>{r.icon}</div>
                   <span style={{fontSize:13,color:"#7f1d1d",lineHeight:1.5}}>{r.p}</span>
                 </div>
-              </div>
-              {/* Mit Syntrix */}
-              <div style={{background:"#f0fdf4",padding:"14px 16px",display:"flex",alignItems:"flex-start",gap:10}}>
-                <div style={{width:28,height:28,borderRadius:8,background:"#dcfce7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,flexShrink:0}}>✓</div>
-                <div>
-                  <div style={{fontSize:9,fontWeight:700,color:"#16a34a",letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:3}}>✓ Mit Syntrix</div>
+              ))}
+            </div>
+            <div className="swipe-card" style={{borderRadius:16,background:"#f0fdf4",border:"2px solid #86efac",padding:"20px"}}>
+              <div style={{fontSize:10,fontWeight:700,color:"#16a34a",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:14}}>Mit Syntrix</div>
+              {rows.map((r,i)=>(
+                <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:12}}>
+                  <div style={{width:28,height:28,borderRadius:8,background:"#dcfce7",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,flexShrink:0}}>✓</div>
                   <span style={{fontSize:13,color:"#14532d",lineHeight:1.5,fontWeight:500}}>{r.s}</span>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+          <p style={{textAlign:"center",fontSize:11,color:"#94a3b8",marginTop:4}}>← Wischen →</p>
         </div>
-
       </div>
     </section>
   );
@@ -410,24 +416,24 @@ function SystemSection({ onFunnel }) {
       <div style={{maxWidth:1200,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:56}}>
           <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#0ea5e9",textTransform:"uppercase"}}>Systemischer Ansatz</span>
-          <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(24px,4vw,48px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:10}}>Vom Chaos zum planbaren System</h2>
+          <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(24px,4vw,48px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:10}}>Vom Chaos zum planbaren System</h2>
           <p style={{fontSize:16,color:"#475569",maxWidth:480,margin:"0 auto"}}>Kein Zufall. Ein strukturierter Weg zu messbaren Ergebnissen.</p>
         </div>
-        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:48,padding:"0 2%"}}>
+        <div className="sys-desktop" style={{display:"flex",alignItems:"center",gap:6,marginBottom:48,padding:"0 2%"}}>
           {["Chaos","","Kontrolle","","Wachstum"].map((l,i)=>
             i%2===0
-              ? <span key={i} style={{fontSize:11,fontWeight:700,letterSpacing:"0.1em",color:["#ef4444","","#0ea5e9","","#22c55e"][i],textTransform:"uppercase"}}>{l}</span>
+              ? <span key={i} style={{fontSize:11,fontWeight:700,letterSpacing:"0.1em",color:i===0?"#ef4444":i===2?"#0ea5e9":"#22c55e",textTransform:"uppercase"}}>{l}</span>
               : <div key={i} style={{flex:1,height:2,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden"}}>
-                  <div style={{height:"100%",width:vis?"100%":"0%",background:`linear-gradient(90deg,${i===1?"#ef4444,#0ea5e9":"#0ea5e9,#22c55e"})`,transition:"width 1.8s ease",borderRadius:99}}/>
+                  <div style={{height:"100%",width:vis?"100%":"0%",background:"linear-gradient(90deg,"+(i===1?"#ef4444,#0ea5e9":"#0ea5e9,#22c55e")+")",transition:"width 1.8s ease",borderRadius:99}}/>
                 </div>
           )}
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 40px 1fr 40px 1fr",gap:0,alignItems:"stretch"}}>
+        <div className="sys-desktop" style={{display:"grid",gridTemplateColumns:"1fr 40px 1fr 40px 1fr",gap:0,alignItems:"stretch"}}>
           {/* CHAOS */}
           <div className="proc-card" style={{...glass,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.18)",opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(28px)",transition:"opacity 0.6s,transform 0.6s"}}>
             <div style={{width:48,height:48,borderRadius:14,background:"rgba(239,68,68,0.14)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:16}}>💥</div>
             <div style={{fontSize:10,fontWeight:700,color:"#ef4444",letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Phase 1</div>
-            <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Unstrukturierter Vertrieb</h3>
+            <h3 style={{fontFamily:"Sora,sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Unstrukturierter Vertrieb</h3>
             {["Unregelmäßige Anfragen","Hohe Werbekosten ohne Ergebnis","Zeitverlust durch manuelle Prozesse"].map((b,i)=>(
               <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}>
                 <span style={{color:"#ef4444",flexShrink:0,marginTop:2,fontSize:13}}>✗</span>
@@ -444,7 +450,7 @@ function SystemSection({ onFunnel }) {
             <div style={{position:"absolute",top:-13,left:"50%",transform:"translateX(-50%)",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",borderRadius:100,padding:"3px 14px",fontSize:10,fontWeight:700,color:"#fff",whiteSpace:"nowrap"}}>⚡ Syntrix System</div>
             <div style={{width:48,height:48,borderRadius:14,background:"rgba(14,165,233,0.14)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:16,marginTop:8}}>⚙️</div>
             <div style={{fontSize:10,fontWeight:700,color:"#0ea5e9",letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Phase 2</div>
-            <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Syntrix System</h3>
+            <h3 style={{fontFamily:"Sora,sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Syntrix System</h3>
             {["Strukturierter Funnel","Automatisierte Leadqualifizierung","Datenbasierte Optimierung"].map((b,i)=>(
               <div key={i} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:10}}>
                 <span style={{color:"#0ea5e9",flexShrink:0,marginTop:2,fontSize:13}}>✓</span>
@@ -460,7 +466,7 @@ function SystemSection({ onFunnel }) {
           <div className="proc-card" style={{...glass,background:"rgba(34,197,94,0.06)",border:"1px solid rgba(34,197,94,0.18)",opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(28px)",transition:"opacity 0.6s ease 0.3s,transform 0.6s ease 0.3s"}}>
             <div style={{width:48,height:48,borderRadius:14,background:"rgba(34,197,94,0.14)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:16}}>🎯</div>
             <div style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.12em",textTransform:"uppercase",marginBottom:8}}>Phase 3</div>
-            <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Messbare Ergebnisse</h3>
+            <h3 style={{fontFamily:"Sora,sans-serif",fontSize:17,fontWeight:800,color:"#fff",marginBottom:16}}>Messbare Ergebnisse</h3>
             <div style={{display:"flex",flexDirection:"column",gap:10}}>
               {[
                 {icon:"→", text:"Anfragen kommen planbar — nicht zufällig"},
@@ -475,7 +481,41 @@ function SystemSection({ onFunnel }) {
               ))}
             </div>
           </div>
-        </div>
+        </div>{/* end sys-desktop */}
+
+        {/* MOBILE — Vertikale Timeline */}
+        <div className="sys-mobile" style={{display:"none",position:"relative",paddingLeft:28}}>
+          <div style={{position:"absolute",left:9,top:0,bottom:0,width:2,background:"linear-gradient(to bottom,#ef4444,#0ea5e9,#22c55e)",opacity:0.3,borderRadius:99}}/>
+          {[
+            {phase:"Phase 1",title:"Unstrukturierter Vertrieb",col:"#ef4444",dot:"#ef4444",hl:false,
+             pts:["Unregelmäßige Anfragen","Hohe Werbekosten ohne Ergebnis","Zeitverlust durch Prozesse"],mk:"✗"},
+            {phase:"Phase 2",title:"Syntrix System",col:"#0ea5e9",dot:"#0ea5e9",hl:true,
+             pts:["Strukturierter Funnel","Automatisierte Leadqualifizierung","Datenbasierte Optimierung"],mk:"✓"},
+            {phase:"Phase 3",title:"Messbare Ergebnisse",col:"#22c55e",dot:"#22c55e",hl:false,
+             pts:["Anfragen kommen planbar","Vertrieb qualifiziert sich selbst","Wachstum ohne mehr Aufwand"],mk:"→"},
+          ].map((ph,i)=>(
+            <div key={i} style={{position:"relative",marginBottom:i<2?24:0}}>
+              <div style={{position:"absolute",left:-24,top:16,width:12,height:12,borderRadius:"50%",background:ph.dot}}/>
+              <div style={{
+                borderRadius:16,padding:"16px",
+                background:ph.hl?"rgba(14,165,233,0.08)":"rgba(255,255,255,0.03)",
+                border:ph.hl?"2px solid rgba(14,165,233,0.4)":"1px solid rgba(255,255,255,0.07)",
+                boxShadow:ph.hl?"0 0 24px rgba(14,165,233,0.15)":"none"
+              }}>
+                {ph.hl&&<div style={{display:"inline-block",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",borderRadius:100,padding:"2px 12px",fontSize:9,fontWeight:700,color:"#fff",marginBottom:8}}>Syntrix System</div>}
+                <div style={{fontSize:9,fontWeight:700,color:ph.col,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>{ph.phase}</div>
+                <div style={{fontFamily:"Sora,sans-serif",fontSize:15,fontWeight:800,color:"#fff",marginBottom:10}}>{ph.title}</div>
+                {ph.pts.map((p,j)=>(
+                  <div key={j} style={{display:"flex",gap:8,alignItems:"flex-start",marginBottom:6}}>
+                    <span style={{color:ph.col,fontSize:11,flexShrink:0,marginTop:2,fontWeight:700}}>{ph.mk}</span>
+                    <span style={{fontSize:13,color:"#94a3b8",lineHeight:1.5}}>{p}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>{/* end sys-mobile */}
+
         <div style={{textAlign:"center",marginTop:52}}>
           <button onClick={onFunnel} className="cta-btn" style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:14,padding:"16px 38px",fontSize:16,fontWeight:700,cursor:"pointer",boxShadow:"0 6px 24px rgba(14,165,233,0.3)"}}>Kostenlose Potenzialanalyse starten →</button>
           <p style={{fontSize:13,color:"#475569",marginTop:12}}>Finde heraus, wo dein aktuelles System Potenzial verliert.</p>
@@ -505,7 +545,7 @@ function ProcessSection({ onFunnel, onModal }) {
       <div style={{maxWidth:1200,margin:"0 auto"}}>
         <div style={{marginBottom:52}}>
           <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#0ea5e9",textTransform:"uppercase"}}>Unser Prozess</span>
-          <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(24px,4vw,48px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:10}}>Von der Analyse zum skalierbaren System</h2>
+          <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(24px,4vw,48px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:10}}>Von der Analyse zum skalierbaren System</h2>
           <p style={{fontSize:15,color:"#475569"}}>Ein klarer Prozess – von der ersten Analyse bis zu messbaren Ergebnissen</p>
         </div>
         {/* Timeline line */}
@@ -514,11 +554,11 @@ function ProcessSection({ onFunnel, onModal }) {
         </div>
         <div className="proc-grid-wrap" style={{display:"grid",gridTemplateColumns:"1.4fr 1fr 1fr 1fr",gap:16}}>
           {steps.map((s,i)=>(
-            <div key={i} className="proc-card" style={{background:s.featured?"rgba(14,165,233,0.07)":"rgba(255,255,255,0.025)",border:s.featured?`2px solid rgba(14,165,233,0.45)`:"1px solid rgba(255,255,255,0.07)",borderRadius:20,padding:s.featured?"28px 22px":"22px 18px",backdropFilter:"blur(10px)",position:"relative",boxShadow:s.featured?"0 0 40px rgba(14,165,233,0.15)":undefined,opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(28px)",transition:`opacity 0.6s ease ${i*0.12}s,transform 0.6s ease ${i*0.12}s`}}>
+            <div key={i} className="proc-card" style={{background:s.featured?"rgba(14,165,233,0.07)":"rgba(255,255,255,0.025)",border:s.featured?"2px solid rgba(14,165,233,0.45)":"1px solid rgba(255,255,255,0.07)",borderRadius:20,padding:s.featured?"28px 22px":"22px 18px",backdropFilter:"blur(10px)",position:"relative",boxShadow:s.featured?"0 0 40px rgba(14,165,233,0.15)":undefined,opacity:vis?1:0,transform:vis?"translateY(0)":"translateY(28px)",transition:"opacity 0.6s ease "+(i*0.12)+"s,transform 0.6s ease "+(i*0.12)+"s"}}>
               {s.badge&&<div style={{position:"absolute",top:-12,left:18,background:"linear-gradient(135deg,#0ea5e9,#6366f1)",borderRadius:100,padding:"3px 12px",fontSize:10,fontWeight:700,color:"#fff"}}>{s.badge}</div>}
               <div style={{fontSize:s.featured?28:22,marginBottom:12,marginTop:s.badge?8:0}}>{s.icon}</div>
               <div style={{fontSize:10,fontWeight:700,color:s.c,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>{s.num}</div>
-              <h3 style={{fontFamily:"'Sora',sans-serif",fontSize:s.featured?17:15,fontWeight:800,color:"#fff",marginBottom:s.sub?2:10}}>{s.title}</h3>
+              <h3 style={{fontFamily:"Sora,sans-serif",fontSize:s.featured?17:15,fontWeight:800,color:"#fff",marginBottom:s.sub?2:10}}>{s.title}</h3>
               {s.sub&&<div style={{fontSize:11,color:s.c,fontWeight:600,marginBottom:10}}>({s.sub})</div>}
               <p style={{fontSize:13,color:"#64748b",lineHeight:1.7,marginBottom:s.note?12:0}}>{s.text}</p>
               {s.note&&<div style={{padding:"8px 12px",background:"rgba(14,165,233,0.07)",borderRadius:8,border:"1px solid rgba(14,165,233,0.18)"}}><span style={{fontSize:11,color:"#7dd3fc"}}>{s.note}</span></div>}
@@ -550,14 +590,14 @@ function FaqSection({ onFunnel }) {
       <div style={{maxWidth:760,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:52}}>
           <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#0ea5e9",textTransform:"uppercase"}}>FAQ</span>
-          <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(24px,4vw,44px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:8}}>Häufige Fragen</h2>
+          <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(24px,4vw,44px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginTop:12,marginBottom:8}}>Häufige Fragen</h2>
           <p style={{fontSize:14,color:"#475569"}}>Klare Antworten auf die wichtigsten Fragen zur Zusammenarbeit</p>
         </div>
         <div style={{display:"flex",flexDirection:"column",gap:8}}>
           {faqs.map((f,i)=>(
             <div key={i} className="faq-row" onClick={()=>setOpen(open===i?-1:i)} style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:14,overflow:"hidden",backdropFilter:"blur(8px)"}}>
               <div style={{padding:"18px 22px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16}}>
-                <span style={{fontSize:15,fontWeight:600,color:"#f1f5f9",fontFamily:"'Sora',sans-serif"}}>{f.q}</span>
+                <span style={{fontSize:15,fontWeight:600,color:"#f1f5f9",fontFamily:"Sora,sans-serif"}}>{f.q}</span>
                 <div style={{width:26,height:26,borderRadius:"50%",background:open===i?"linear-gradient(135deg,#0ea5e9,#6366f1)":"rgba(255,255,255,0.07)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14,fontWeight:700,flexShrink:0,transition:"background 0.25s"}}>{open===i?"−":"+"}</div>
               </div>
               {open===i&&<div style={{padding:"0 22px 20px",fontSize:14,color:"#64748b",lineHeight:1.8}}>{f.a}</div>}
@@ -795,7 +835,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           <div style={{position:"relative",height:2,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden"}}>
             <div style={{
               position:"absolute",top:0,left:0,height:"100%",
-              width:`${pct}%`,
+              width:pct+"%",
               background:"linear-gradient(90deg,#0ea5e9,#6366f1)",
               borderRadius:99,
               transition:"width 0.6s cubic-bezier(0.4,0,0.2,1)",
@@ -840,7 +880,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                   <button
                     key={i}
                     onClick={()=>pick(opt)}
-                    className={`qa-premium${ans[q.id]===opt?" selected-q":""}`}
+                    className={"qa-premium"+(ans[q.id]===opt?" selected-q":"")}
                   >
                     <div className="qa-num">
                       {ans[q.id]===opt?(
@@ -888,7 +928,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                   <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
                   <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse abgeschlossen · Ergebnis wird erstellt</span>
                 </div>
-                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(20px,3.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:10}}>Fast geschafft.</h2>
+                <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(20px,3.5vw,28px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:10}}>Fast geschafft.</h2>
                 <p style={{fontSize:14,color:"#475569",lineHeight:1.7,maxWidth:420}}>Trag deine Kontaktdaten ein — du erhältst deine persönliche Auswertung.</p>
               </div>
 
@@ -935,7 +975,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                     borderRadius:12,padding:"15px",
                     fontSize:15,fontWeight:700,
                     cursor:lead.name.trim()&&lead.email.trim()?"pointer":"not-allowed",
-                    fontFamily:"'Sora',sans-serif",
+                    fontFamily:"Sora,sans-serif",
                     transition:"all 0.2s",
                     boxShadow:lead.name.trim()&&lead.email.trim()?"0 4px 20px rgba(14,165,233,0.35)":"none"
                   }}
@@ -957,7 +997,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"60vh",gap:24,padding:"0 16px"}}>
                   <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:4,pointerEvents:"none"}}>
                     <Logo size={26}/>
-                    <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:15,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,color:"#475569"}}>Digital</span></span>
+                    <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:15,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,color:"#475569"}}>Digital</span></span>
                   </div>
                   <div style={{width:"100%",maxWidth:300}}>
                     <div style={{height:2,background:"rgba(255,255,255,0.06)",borderRadius:99,overflow:"hidden",marginBottom:20}}>
@@ -991,8 +1031,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                   <div style={{width:6,height:6,borderRadius:"50%",background:"#22c55e"}}/>
                   <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Syntrix Analyse-System™</span>
                 </div>
-                <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(18px,3vw,24px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:4}}>
-                  Deine Analyse ist abgeschlossen{lead.name?`, ${lead.name.split(" ")[0]}`:""}.
+                <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(18px,3vw,24px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:4}}>
+                  Deine Analyse ist abgeschlossen{lead.name?", "+lead.name.split(" ")[0]:""}{"."}
                 </h2>
                 <p style={{fontSize:12,color:"#334155"}}>Basierend auf deinen Angaben — systematisch ausgewertet</p>
               </div>
@@ -1007,11 +1047,11 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                       <circle cx="44" cy="44" r="36" fill="none"
                         stroke={result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444"}
                         strokeWidth="7" strokeLinecap="round"
-                        strokeDasharray={`${result.score/100*226} 226`}
-                        style={{filter:`drop-shadow(0 0 6px ${result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444"})`}}/>
+                        strokeDasharray={(result.score/100*226)+" 226"}
+                        style={{filter:"drop-shadow(0 0 6px "+(result.score>=70?"#22c55e":result.score>=40?"#f59e0b":"#ef4444")+")"}}/>
                     </svg>
                     <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-                      <div style={{fontSize:24,fontWeight:900,color:"#f8fafc",fontFamily:"'Sora',sans-serif",lineHeight:1}}>{result.score}</div>
+                      <div style={{fontSize:24,fontWeight:900,color:"#f8fafc",fontFamily:"Sora,sans-serif",lineHeight:1}}>{result.score}</div>
                       <div style={{fontSize:9,color:"#475569"}}>/100</div>
                     </div>
                   </div>
@@ -1032,7 +1072,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                         <span style={{fontSize:10,fontWeight:700,color:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}}>{score>=70?"Gut":score>=40?"Mittel":"Schwach"}</span>
                       </div>
                       <div style={{height:4,background:"rgba(255,255,255,0.06)",borderRadius:99}}>
-                        <div style={{height:"100%",width:`${score}%`,background:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444",borderRadius:99,boxShadow:`0 0 6px ${score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"}`,transition:"width 1s ease"}}/>
+                        <div style={{height:"100%",width:score+"%",background:score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444",borderRadius:99,boxShadow:"0 0 6px "+(score>=70?"#22c55e":score>=40?"#f59e0b":"#ef4444"),transition:"width 1s ease"}}/>
                       </div>
                     </div>
                   ))}
@@ -1087,7 +1127,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 {claudeAnalysis&&!claudeLoading&&(
                   <div style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,padding:"16px",animation:"fadeSlideUp 0.5s ease both"}}>
                     <div style={{fontSize:9,fontWeight:700,color:"#0ea5e9",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:10}}>KI-Analyse · Syntrix Analyse-System™</div>
-                    <div style={{fontFamily:"'Sora',sans-serif",fontSize:14,fontWeight:800,color:"#f1f5f9",marginBottom:12,lineHeight:1.3}}>{claudeAnalysis.headline}</div>
+                    <div style={{fontFamily:"Sora,sans-serif",fontSize:14,fontWeight:800,color:"#f1f5f9",marginBottom:12,lineHeight:1.3}}>{claudeAnalysis.headline}</div>
                     <div style={{display:"flex",flexDirection:"column",gap:8}}>
                       {[
                         {label:"Hauptproblem",value:claudeAnalysis.hauptproblem,color:"#ef4444"},
@@ -1095,7 +1135,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                         {label:"Sofortmaßnahme",value:claudeAnalysis.sofortmassnahme,color:"#22c55e"},
                         {label:"Potenzial in 30 Tagen",value:claudeAnalysis.potenzial_in_30_tagen,color:"#a78bfa"},
                       ].map(({label,value,color})=>(
-                        <div key={label} style={{borderLeft:`2px solid ${color}`,paddingLeft:10}}>
+                        <div key={label} style={{borderLeft:"2px solid "+color,paddingLeft:10}}>
                           <div style={{fontSize:9,fontWeight:700,color,letterSpacing:"0.08em",textTransform:"uppercase",marginBottom:2}}>{label}</div>
                           <div style={{fontSize:12,color:"#94a3b8",lineHeight:1.5}}>{value}</div>
                         </div>
@@ -1109,7 +1149,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
               <div style={{background:"linear-gradient(135deg,rgba(14,165,233,0.06),rgba(99,102,241,0.04))",border:"1px solid rgba(14,165,233,0.15)",borderRadius:14,padding:"12px 16px",marginBottom:8,display:"flex",gap:10,alignItems:"center"}}>
                 <span style={{fontSize:18,flexShrink:0}}>📩</span>
                 <div>
-                  <div style={{fontFamily:"'Sora',sans-serif",fontSize:12,fontWeight:700,color:"#f1f5f9",marginBottom:2}}>Diese Auswertung geht auch an deine E-Mail</div>
+                  <div style={{fontFamily:"Sora,sans-serif",fontSize:12,fontWeight:700,color:"#f1f5f9",marginBottom:2}}>Diese Auswertung geht auch an deine E-Mail</div>
                   <p style={{fontSize:11,color:"#475569",lineHeight:1.5}}>Mit konkreten Strategien und nächsten Schritten.</p>
                 </div>
               </div>
@@ -1119,7 +1159,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                 width:"100%",background:"linear-gradient(135deg,#0ea5e9,#6366f1)",
                 color:"#fff",border:"none",borderRadius:12,padding:"13px",
                 fontSize:14,fontWeight:700,cursor:"pointer",
-                fontFamily:"'Sora',sans-serif",
+                fontFamily:"Sora,sans-serif",
                 boxShadow:"0 6px 24px rgba(14,165,233,0.35)",marginBottom:4
               }}>
                 Kostenloses Erstgespräch buchen →
@@ -1196,7 +1236,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
       <div style={{padding:"18px 28px",borderBottom:"1px solid rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <button onClick={onBack} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
           <Logo size={24}/>
-          <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:15,color:"#f8fafc"}}>
+          <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:15,color:"#f8fafc"}}>
             Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span>
           </span>
         </button>
@@ -1218,7 +1258,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
               <div style={{width:5,height:5,borderRadius:"50%",background:"#22c55e"}}/>
               <span style={{fontSize:10,fontWeight:700,color:"#22c55e",letterSpacing:"0.1em",textTransform:"uppercase"}}>Analyse abgeschlossen</span>
             </div>
-            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
+            <h1 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
               Lass uns deine Analyse konkret umsetzen
             </h1>
             <p style={{fontSize:15,color:"#475569",lineHeight:1.7,marginBottom:24}}>
@@ -1240,7 +1280,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
               <div style={{width:5,height:5,borderRadius:"50%",background:"#0ea5e9"}}/>
               <span style={{fontSize:10,fontWeight:700,color:"#38bdf8",letterSpacing:"0.1em",textTransform:"uppercase"}}>Strategiegespräch</span>
             </div>
-            <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
+            <h1 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(22px,2.8vw,32px)",fontWeight:900,color:"#f8fafc",letterSpacing:"-0.025em",marginBottom:14,lineHeight:1.2}}>
               Ein Gespräch. Klare Richtung.
             </h1>
             <p style={{fontSize:15,color:"#475569",lineHeight:1.7,marginBottom:24}}>
@@ -1284,7 +1324,7 @@ function CalendlyPage({ leadData, onBack, onFunnel, onPage }) {
             <div>
               <button onClick={onBack} style={{display:"inline-flex",alignItems:"center",gap:9,marginBottom:14,background:"none",border:"none",cursor:"pointer",padding:0}}>
                 <Logo size={26}/>
-                <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:17,color:"#fff"}}>
+                <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:17,color:"#fff"}}>
                   Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span>
                 </span>
               </button>
@@ -1410,14 +1450,14 @@ function LegalPage({ type, onBack }) {
         <div style={{maxWidth:700,margin:"0 auto",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <button onClick={()=>{onBack();setTimeout(()=>window.scrollTo({top:0,behavior:"smooth"}),100);}} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0}}>
             <Logo size={26}/>
-            <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
+            <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:16,color:"#f8fafc"}}>Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#475569"}}>Digital</span></span>
           </button>
           <span style={{fontSize:12,color:"#334155"}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</span>
         </div>
       </div>
       <div style={{maxWidth:700,margin:"0 auto"}}>
-        <h1 style={{fontFamily:"'Sora',sans-serif",fontSize:30,fontWeight:800,color:"#fff",marginBottom:30}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</h1>
-        {secs.map(([t,items])=>(<div key={t} style={{marginBottom:26}}><h2 style={{fontFamily:"'Sora',sans-serif",fontSize:15,fontWeight:700,color:"#fff",marginBottom:9}}>{t}</h2>{items.map((it,i)=>{
+        <h1 style={{fontFamily:"Sora,sans-serif",fontSize:30,fontWeight:800,color:"#fff",marginBottom:30}}>{type==="impressum"?"Impressum":"Datenschutzerklärung"}</h1>
+        {secs.map(([t,items])=>(<div key={t} style={{marginBottom:26}}><h2 style={{fontFamily:"Sora,sans-serif",fontSize:15,fontWeight:700,color:"#fff",marginBottom:9}}>{t}</h2>{items.map((it,i)=>{
   const urlMatch = it.match(/(https?:\/\/[^\s]+)/);
   if(urlMatch) {
     const parts = it.split(urlMatch[0]);
@@ -1847,7 +1887,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
           {/* LOGO */}
           <button onClick={()=>{setMenuOpen(false);window.scrollTo({top:0,behavior:"smooth"});}} style={{display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer",padding:0,zIndex:10001}}>
             <Logo size={28}/>
-            <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:18,color:"#f8fafc"}}>
+            <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:18,color:"#f8fafc"}}>
               Syntrix<span style={{color:"#38bdf8"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"rgba(148,163,184,0.7)"}}>Digital</span>
             </span>
           </button>
@@ -1886,7 +1926,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             ].map(({label,id},i)=>(
               <button key={id}
                 onClick={()=>{setMenuOpen(false);setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"});},350);}}
-                style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"20px 0",fontSize:24,fontWeight:700,color:"#f8fafc",background:"none",border:"none",borderBottom:"1px solid rgba(255,255,255,0.07)",cursor:"pointer",fontFamily:"'Sora',sans-serif",textAlign:"left"}}>
+                style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"20px 0",fontSize:24,fontWeight:700,color:"#f8fafc",background:"none",border:"none",borderBottom:"1px solid rgba(255,255,255,0.07)",cursor:"pointer",fontFamily:"Sora,sans-serif",textAlign:"left"}}>
                 {label}
                 <span style={{color:"#0ea5e9"}}>→</span>
               </button>
@@ -1952,7 +1992,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             </div>
 
             {/* Headline – groß, zentriert auf links */}
-            <h1 style={{fontFamily:"'Sora',sans-serif",fontWeight:900,lineHeight:1.0,letterSpacing:"-0.04em",marginBottom:28,animation:"fadeUp 0.7s ease 0.1s both"}}>
+            <h1 style={{fontFamily:"Sora,sans-serif",fontWeight:900,lineHeight:1.0,letterSpacing:"-0.04em",marginBottom:28,animation:"fadeUp 0.7s ease 0.1s both"}}>
               <span style={{display:"block",fontSize:"clamp(38px,5.5vw,76px)",color:"#f8fafc"}}>Matrix your</span>
               <span style={{
                 display:"block",
@@ -2079,7 +2119,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               }}>Über uns</span>
 
               <h2 style={{
-                fontFamily:"'Sora',sans-serif",
+                fontFamily:"Sora,sans-serif",
                 fontSize:"clamp(26px,3.2vw,42px)",
                 fontWeight:900,
                 color:"#0f172a",
@@ -2173,7 +2213,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                 <div style={{display:"flex",alignItems:"center",gap:10}}>
                   <Logo size={24} dark={true}/>
                   <div>
-                    <div style={{fontSize:12,fontWeight:700,color:"#94a3b8",fontFamily:"'Sora',sans-serif"}}>Johannes Rempel</div>
+                    <div style={{fontSize:12,fontWeight:700,color:"#94a3b8",fontFamily:"Sora,sans-serif"}}>Johannes Rempel</div>
                     <div style={{fontSize:10,color:"#475569",letterSpacing:"0.02em"}}>Inhaber, Syntrix Digital</div>
                   </div>
                 </div>
@@ -2200,10 +2240,10 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               <div style={{
                 fontSize:10,fontWeight:700,letterSpacing:"0.12em",
                 color:"#94a3b8",textTransform:"uppercase",
-                marginBottom:8,fontFamily:"'Sora',sans-serif",
+                marginBottom:8,fontFamily:"Sora,sans-serif",
               }}>Vertrauen</div>
               <h3 style={{
-                fontFamily:"'Sora',sans-serif",
+                fontFamily:"Sora,sans-serif",
                 fontSize:20,fontWeight:800,
                 color:"#0f172a",letterSpacing:"-0.02em",
                 marginBottom:12,lineHeight:1.2,
@@ -2230,10 +2270,10 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               <div style={{
                 fontSize:10,fontWeight:700,letterSpacing:"0.12em",
                 color:"#94a3b8",textTransform:"uppercase",
-                marginBottom:8,fontFamily:"'Sora',sans-serif",
+                marginBottom:8,fontFamily:"Sora,sans-serif",
               }}>Autorität</div>
               <h3 style={{
-                fontFamily:"'Sora',sans-serif",
+                fontFamily:"Sora,sans-serif",
                 fontSize:20,fontWeight:800,
                 color:"#0f172a",letterSpacing:"-0.02em",
                 marginBottom:12,lineHeight:1.2,
@@ -2259,10 +2299,10 @@ function LandingPage({ onFunnel, onPage, onModal }) {
               <div style={{
                 fontSize:10,fontWeight:700,letterSpacing:"0.12em",
                 color:"#94a3b8",textTransform:"uppercase",
-                marginBottom:8,fontFamily:"'Sora',sans-serif",
+                marginBottom:8,fontFamily:"Sora,sans-serif",
               }}>Perspektive</div>
               <h3 style={{
-                fontFamily:"'Sora',sans-serif",
+                fontFamily:"Sora,sans-serif",
                 fontSize:20,fontWeight:800,
                 color:"#0f172a",letterSpacing:"-0.02em",
                 marginBottom:12,lineHeight:1.2,
@@ -2286,7 +2326,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:16,marginBottom:48}}>
             <div>
               <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.14em",color:"#6366f1",textTransform:"uppercase"}}>Leistungen</span>
-              <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(22px,4vw,42px)",fontWeight:800,color:"#0f172a",letterSpacing:"-0.025em",maxWidth:460,marginTop:10}}>Alles was du brauchst. Nichts was du nicht brauchst.</h2>
+              <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(22px,4vw,42px)",fontWeight:800,color:"#0f172a",letterSpacing:"-0.025em",maxWidth:460,marginTop:10}}>Alles was du brauchst. Nichts was du nicht brauchst.</h2>
             </div>
             <button onClick={onModal} style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:11,padding:"11px 22px",fontSize:14,fontWeight:700,cursor:"pointer",whiteSpace:"nowrap"}}>Leistung anfragen →</button>
           </div>
@@ -2313,7 +2353,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                     <div style={{
                       width:48,height:48,borderRadius:14,
                       background:"#fff",
-                      boxShadow:`0 2px 10px ${color}22`,
+                      boxShadow:"0 2px 10px "+color+"22",
                       display:"flex",alignItems:"center",justifyContent:"center",
                       flexShrink:0,
                     }}>
@@ -2323,7 +2363,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                     <div style={{
                       width:28,height:28,borderRadius:8,
                       background:"rgba(255,255,255,0.7)",
-                      border:`1px solid ${color}33`,
+                      border:"1px solid "+color+"33",
                       display:"flex",alignItems:"center",justifyContent:"center",
                       flexShrink:0,
                     }}>
@@ -2336,7 +2376,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                   <div style={{padding:"18px 22px 20px"}}>
                     <div style={{
                       fontSize:15,fontWeight:700,color:"#0f172a",
-                      fontFamily:"'Sora',sans-serif",marginBottom:7,
+                      fontFamily:"Sora,sans-serif",marginBottom:7,
                       letterSpacing:"-0.01em",
                     }}>{s.title}</div>
                     <div style={{fontSize:13,color:"#64748b",lineHeight:1.75,marginBottom:14}}>{s.desc}</div>
@@ -2344,7 +2384,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
                     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                       <div style={{
                         height:2,flex:1,borderRadius:99,
-                        background:`linear-gradient(90deg,${color}44,${color}11)`,
+                        background:"linear-gradient(90deg,"+color+"44,"+color+"11)",
                         marginRight:12,
                       }}/>
                       <span style={{fontSize:12,color:color,fontWeight:600,whiteSpace:"nowrap"}}>
@@ -2367,7 +2407,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
       <section style={{padding:"100px 5vw",background:"linear-gradient(135deg,#0f172a,#1e1b4b,#0f3460)",backgroundSize:"200% 200%",animation:"gradMove 8s ease infinite",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:-160,right:-160,width:560,height:560,borderRadius:"50%",background:"radial-gradient(circle,rgba(99,102,241,0.16) 0%,transparent 70%)",pointerEvents:"none"}}/>
         <div style={{maxWidth:640,margin:"0 auto",textAlign:"center",position:"relative"}}>
-          <h2 style={{fontFamily:"'Sora',sans-serif",fontSize:"clamp(26px,5vw,50px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginBottom:16,lineHeight:1.15}}>Bereit für planbar mehr Kunden?</h2>
+          <h2 style={{fontFamily:"Sora,sans-serif",fontSize:"clamp(26px,5vw,50px)",fontWeight:800,color:"#fff",letterSpacing:"-0.025em",marginBottom:16,lineHeight:1.15}}>Bereit für planbar mehr Kunden?</h2>
           <p style={{fontSize:16,color:"#64748b",lineHeight:1.75,marginBottom:36}}>Starte jetzt die kostenlose Erstanalyse — in 2 Minuten <strong style={{color:"#94a3b8"}}>erfährst</strong> du, wo dein größtes Potenzial liegt.</p>
           <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginBottom:22}}>
             <button onClick={onFunnel} className="cta-btn" style={{background:"linear-gradient(135deg,#0ea5e9,#6366f1)",color:"#fff",border:"none",borderRadius:13,padding:"16px 36px",fontSize:16,fontWeight:700,cursor:"pointer",boxShadow:"0 8px 28px rgba(99,102,241,0.4)"}}>Kostenlose Potenzialanalyse starten →</button>
@@ -2387,7 +2427,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
             <div>
               <button onClick={()=>window.scrollTo({top:0,behavior:"smooth"})} style={{display:"inline-flex",alignItems:"center",gap:9,marginBottom:14,background:"none",border:"none",cursor:"pointer",padding:0}}>
                 <Logo size={26}/>
-                <span style={{fontFamily:"'Sora',sans-serif",fontWeight:800,fontSize:17,color:"#fff"}}>
+                <span style={{fontFamily:"Sora,sans-serif",fontWeight:800,fontSize:17,color:"#fff"}}>
                   Syntrix<span style={{color:"#0ea5e9"}}>.</span><span style={{fontWeight:300,fontSize:"0.88em",color:"#94a3b8"}}>Digital</span>
                 </span>
               </button>

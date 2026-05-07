@@ -2538,6 +2538,7 @@ export default function App() {
   const [page,setPage] = useState(getInitialPage);
   const [showModal,setModal] = useState(false);
   const [leadData,setLead]   = useState(null);
+  const [funnelKey,setFunnelKey] = useState(0);
 
   useEffect(()=>{
     // ── Plausible Analytics ───────────────────────────────────────────
@@ -2620,14 +2621,14 @@ export default function App() {
     }
   };
 
-  if(page==="funnel")     return <PotenzialFunnel onBack={()=>setPage("home")} onCalendly={goCalendly}/>;
-  if(page==="calendly")   return <CalendlyPage leadData={leadData} onBack={()=>setPage("home")} onFunnel={()=>setPage("funnel")} onPage={navigate}/>;
+  if(page==="funnel")     return <PotenzialFunnel key={funnelKey} onBack={()=>setPage("home")} onCalendly={goCalendly}/>;
+  if(page==="calendly")   return <CalendlyPage leadData={leadData} onBack={()=>setPage("home")} onFunnel={()=>{setFunnelKey(k=>k+1);setPage("funnel");}} onPage={navigate}/>;
   if(page==="impressum")  return <LegalPage type="impressum"  onBack={()=>navigate("home")}/>;
   if(page==="datenschutz")return <LegalPage type="datenschutz" onBack={()=>navigate("home")}/>;
   return (
     <>
-      {showModal&&<ServiceModal onClose={()=>setModal(false)} onFunnel={()=>{setModal(false);setPage("funnel");}}/>}
-      <LandingPage onFunnel={()=>setPage("funnel")} onPage={navigate} onModal={()=>setModal(true)}/>
+      {showModal&&<ServiceModal onClose={()=>setModal(false)} onFunnel={()=>{setModal(false);setFunnelKey(k=>k+1);setPage("funnel");}}/>}
+      <LandingPage onFunnel={()=>{setFunnelKey(k=>k+1);setPage("funnel");}} onPage={navigate} onModal={()=>setModal(true)}/>
     </>
   );
 }

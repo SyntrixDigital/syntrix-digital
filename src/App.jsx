@@ -530,6 +530,7 @@ function ProcessSection({ onFunnel, onModal }) {
   const ref=useRef(null);
   const [vis,setVis]=useState(false);
   useEffect(()=>{
+    if(window.innerWidth <= 768){setVis(true);return;}
     const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting) setVis(true);},{threshold:0.1});
     if(ref.current) obs.observe(ref.current);
     return()=>obs.disconnect();
@@ -577,7 +578,7 @@ function ProcessSection({ onFunnel, onModal }) {
 
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 function FaqSection({ onFunnel }) {
-  const [open,setOpen]=useState(0);
+  const [open,setOpen]=useState(-1);
   const faqs=[
     {q:"Welche Ergebnisse kann ich erwarten?",a:"Die Ergebnisse hängen stark von deiner Ausgangssituation ab. In der Regel sehen Kunden bereits innerhalb der ersten Wochen messbare Verbesserungen in Conversion, Leadqualität und Struktur. Je nach Projekt sind sowohl schnelle Ergebnisse möglich als auch der Aufbau eines nachhaltigen Systems für planbares Wachstum."},
     {q:"Wie schnell sehe ich erste Ergebnisse?",a:"Erste Optimierungen zeigen oft bereits nach wenigen Wochen Wirkung. Ein vollständig aufgebautes und skalierbares System entwickelt sich in der Regel innerhalb von 1–3 Monaten."},
@@ -2045,7 +2046,7 @@ function LandingPage({ onFunnel, onPage, onModal }) {
 
           {/* RIGHT – 3D Rotating Funnel mit Partikel-Flow */}
           <div className="hero-canvas-wrap">
-            <FunnelCanvas />
+            {typeof window !== "undefined" && window.innerWidth > 768 && <FunnelCanvas />}
           </div>
         </div>
 

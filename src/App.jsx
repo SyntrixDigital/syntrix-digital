@@ -650,6 +650,18 @@ function PotenzialFunnel({ onBack, onCalendly }) {
   const [claudeLoading,setClaudeLoading]=useState(false);
   const [loadingPhase,setLoadingPhase]=useState(0);
   const [showResult,setShowResult]=useState(false);
+
+  // Beim Start immer zurücksetzen
+  useEffect(()=>{
+    setAns({});
+    setLead({name:"",email:"",phone:""});
+    setResult(null);
+    setStep(0);
+    setClaudeAnalysis(null);
+    setShowResult(false);
+    setLoadingPhase(0);
+    setEmailTouched(false);
+  },[]);
   const isEmailValid=(v)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const total=10,q=QS[step];
 

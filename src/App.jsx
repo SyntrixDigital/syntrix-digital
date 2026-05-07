@@ -791,12 +791,12 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           backdrop-filter:blur(8px);
         }
 
-        @media(hover:hover){.qa-premium:hover{}
+        @media(hover:hover){.qa-premium:hover{
           border-color:rgba(14,165,233,0.4);
           background:rgba(14,165,233,0.06);
           transform:translateX(6px);
           box-shadow:0 4px 24px rgba(14,165,233,0.12),inset 0 0 0 1px rgba(14,165,233,0.15);
-        }
+        }}
         .qa-premium.selected-q{
           border-color:#0ea5e9;
           background:linear-gradient(135deg,rgba(14,165,233,0.12),rgba(99,102,241,0.08));
@@ -814,9 +814,9 @@ function PotenzialFunnel({ onBack, onCalendly }) {
           background:linear-gradient(135deg,#0ea5e9,#6366f1);
           color:#fff;border-color:transparent;
         }
-        @media(hover:hover){.qa-premium:hover:not(.selected-q) .qa-num{}
+        @media(hover:hover){.qa-premium:hover:not(.selected-q) .qa-num{
           background:rgba(14,165,233,0.15);color:#0ea5e9;border-color:rgba(14,165,233,0.3);
-        }
+        }}
         .premium-input{
           width:100%;padding:15px 18px;border-radius:12px;
           border:1px solid rgba(255,255,255,0.1);

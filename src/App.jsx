@@ -194,6 +194,7 @@ function ServiceModal({ onClose, onFunnel }) {
       name:            d.name.trim(),
       email:           d.email.trim(),
       phone:           d.phone.trim() || "–",
+      company:         d.company.trim() || "–",
       leistungen:      d.selected_services.map(id=>({
             "seo":"KI-SEO & Content",
             "li":"LinkedIn Lead-Generierung",
@@ -289,7 +290,8 @@ function ServiceModal({ onClose, onFunnel }) {
             </>}
 
             {step===4 && <>
-              {[{l:"Name *",k:"name",ph:"Max Mustermann",t:"text"},{l:"E-Mail *",k:"email",ph:"max@firma.de",t:"email"},{l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"}].map(({l,k,ph,t})=>(
+              {[{l:"Name *",k:"name",ph:"Max Mustermann",t:"text"},{l:"E-Mail *",k:"email",ph:"max@firma.de",t:"email"},{l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"},
+                    {l:"Unternehmen oder Website (optional)",k:"company",ph:"z.B. mustermann.de oder Muster GmbH",t:"text"}].map(({l,k,ph,t})=>(
                 <div key={k} style={{marginBottom:12}}>
                   <label style={{fontSize:12,color:"#94a3b8",display:"block",marginBottom:5}}>{l}</label>
                   <input
@@ -641,7 +643,7 @@ function calcResult(ans){
 function PotenzialFunnel({ onBack, onCalendly }) {
   const [step,setStep]=useState(0);
   const [ans,setAns]=useState({});
-  const [lead,setLead]=useState({name:"",email:"",phone:""});
+  const [lead,setLead]=useState({name:"",email:"",phone:"",company:""});
   const [result,setResult]=useState(null);
   const [vis,setVis]=useState(true);
   const [dir,setDir]=useState(1);
@@ -702,7 +704,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       method:"POST",mode:"no-cors",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        name:lead.name,email:lead.email,phone:lead.phone||"–",
+        name:lead.name,email:lead.email,phone:lead.phone||"–",company:lead.company||"–",
         score:r.score,status:r.status,
         problem:r.problem,opportunity:r.opportunity,
         quelle:"Potenzialanalyse syntrixdigital.de",

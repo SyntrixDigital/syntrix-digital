@@ -703,7 +703,7 @@ function PotenzialFunnel({ onBack, onCalendly }) {
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         name:lead.name,email:lead.email,phone:lead.phone||"–",
-        score:r.score+"/100",status:r.status,
+        score:r.score,status:r.status,
         problem:r.problem,opportunity:r.opportunity,
         quelle:"Potenzialanalyse syntrixdigital.de",
         timestamp:new Date().toISOString(),

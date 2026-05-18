@@ -952,7 +952,8 @@ function PotenzialFunnel({ onBack, onCalendly }) {
                   {[
                     {l:"Name",k:"name",ph:"Max Mustermann",t:"text"},
                     {l:"E-Mail-Adresse",k:"email",ph:"max@firma.de",t:"email"},
-                    {l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"}
+                    {l:"Telefon (optional)",k:"phone",ph:"+49 123 456789",t:"tel"},
+                    {l:"Unternehmen oder Website (optional)",k:"company",ph:"z.B. mustermann.de oder Muster GmbH",t:"text"}
                   ].map(({l,k,ph,t})=>(
                     <div key={k}>
                       <label style={{fontSize:11,fontWeight:700,color:"#475569",display:"block",marginBottom:8,letterSpacing:"0.06em",textTransform:"uppercase"}}>{l}</label>

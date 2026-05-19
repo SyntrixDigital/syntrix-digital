@@ -171,7 +171,7 @@ const SVCS = [
 // ── SERVICE MODAL (4-Step) ────────────────────────────────────────────────────
 function ServiceModal({ onClose, onFunnel }) {
   const [step, setStep]   = useState(1);
-  const [d, setD]         = useState({ selected_services:[], goal:"", current_status:"", collaboration_type:"", budget:"", timeline:"", name:"", email:"", phone:"", message:"" });
+  const [d, setD]         = useState({ selected_services:[], goal:"", current_status:"", collaboration_type:"", budget:"", timeline:"", name:"", email:"", phone:"", company:"", message:"" });
   const [sent, setSent]   = useState(false);
   const [mEmailTouched, setMEmailTouched] = useState(false);
   const set1 = (k,v) => setD(p=>({...p,[k]:v}));
